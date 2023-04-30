@@ -1,13 +1,4 @@
-import {
-  Container,
-  ListGroup,
-  Col,
-  Row,
-  Button,
-  CardGroup,
-  Nav,
-  Navbar,
-} from "react-bootstrap";
+import { Container, ListGroup, Col, Row, Button } from "react-bootstrap";
 import PaginationComponent from "../components/PaginationComponent";
 import SortOptionComponent from "../components/SortOptionComponent";
 import PriceFilterComponent from "../components/filterQueryResultOptions/PriceFilterComponent";

@@ -163,7 +163,12 @@ function AdminOrdersPage() {
                   <td>{item.category}</td>
                   <td>
                     <div className=" d-flex ">
-                      <Button className="mx-2" size="sm">
+                      <Button
+                        as={Link}
+                        to="/admin/edit-product"
+                        className="mx-2"
+                        size="sm"
+                      >
                         <i className="bi bi-pencil-square"></i>
                       </Button>
                       <Button variant="danger" size="sm">
