@@ -23,7 +23,7 @@ function UserOrderDetailPage() {
     <Container>
       <Row className="mt-3">
         <Col md={8}>
-          <h1>Order Details</h1>
+          <h1 className="mb-4">Order Details</h1>
           <Row className="mb-5">
             <Col md={6}>
               <h2>Shipping</h2>
@@ -44,10 +44,11 @@ function UserOrderDetailPage() {
             <Col md={6}>
               <h2>Payment method</h2>
               <Form.Select>
+                <option value="4">Momo</option>
+                <option value="2">Paypal</option>
                 <option value="1">
                   Cash on delivery (delivery may be delayed)
                 </option>
-                <option value="2">2</option>
                 <option value="3">3</option>
               </Form.Select>
               <Alert variant="danger">Not paid yet</Alert>

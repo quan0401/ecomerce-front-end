@@ -18,6 +18,7 @@ function App() {
       {/* Public routes */}
       <Router>
         <ScrollToTop />
+
         <HeaderComponent />
         <Routes>
           <Route element={<RoutesUserChatComponent />}>

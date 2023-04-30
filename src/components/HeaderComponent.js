@@ -34,7 +34,7 @@ function HeaderComponent() {
           </Nav>
 
           <Nav>
-            <Nav.Link as={Link} to="/admin/users">
+            <Nav.Link as={Link} to="/admin/my-orders">
               Admin
               <span className="position-absolute top-2 start-90 translate-middle p-2 bg-danger border border-light rounded-circle">
                 <span className="visually-hidden">New alerts</span>
@@ -49,7 +49,7 @@ function HeaderComponent() {
               Register
             </Nav.Link>
 
-            <Nav.Link href="#pricing">
+            <Nav.Link as={Link} to="/cart">
               <Badge pill bg="danger">
                 2
               </Badge>

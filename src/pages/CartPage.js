@@ -39,7 +39,7 @@ function CartPage() {
             </ListGroup.Item>
 
             <ListGroup.Item>
-              <Link to="/order-detail">
+              <Link to="/user/cart-detail">
                 <div className="d-grid">
                   <Button variant="success">Proceed to Checkout</Button>
                 </div>

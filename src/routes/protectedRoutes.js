@@ -23,11 +23,11 @@ const routes = [
 
   // Admin Pages
   { path: "/admin/analytics", Component: AdminAnalyticsPage },
-  { path: "/admin/chat-page", Component: AdminChatsPage },
+  { path: "/admin/chats", Component: AdminChatsPage },
   { path: "/admin/create-new-product", Component: AdminCreateProductPage },
   { path: "/admin/edit-product", Component: AdminEditProductPage },
   { path: "/admin/order-detail", Component: AdminOrderDetailsPage },
-  { path: "/admin/orders", Component: AdminOrdersPage },
+  { path: "/admin/my-orders", Component: AdminOrdersPage },
   { path: "/admin/products", Component: AdminProductPage },
   { path: "/admin/users", Component: AdminUsersPage },
 ];
