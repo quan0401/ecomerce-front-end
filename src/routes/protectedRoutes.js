@@ -13,6 +13,7 @@ import AdminOrderDetailsPage from "../pages/admin/AdminOrderDetailsPage";
 import AdminOrdersPage from "../pages/admin/AdminOrdersPage";
 import AdminProductPage from "../pages/admin/AdminProductPage";
 import AdminUsersPage from "../pages/admin/AdminUsersPage";
+import AdminEditUserPage from "../pages/admin/AdminEditUserPage";
 
 const routes = [
   // User Pages
@@ -26,6 +27,7 @@ const routes = [
   { path: "/admin/chats", Component: AdminChatsPage },
   { path: "/admin/create-new-product", Component: AdminCreateProductPage },
   { path: "/admin/edit-product", Component: AdminEditProductPage },
+  { path: "/admin/edit-user", Component: AdminEditUserPage },
   { path: "/admin/order-detail", Component: AdminOrderDetailsPage },
   { path: "/admin/my-orders", Component: AdminOrdersPage },
   { path: "/admin/products", Component: AdminProductPage },

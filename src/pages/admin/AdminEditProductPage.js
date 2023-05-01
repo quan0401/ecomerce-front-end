@@ -150,7 +150,7 @@ function AdminEditProductPage() {
                 <Col style={{ position: "relative" }} md={3}>
                   <Image fluid src="/images/img1.jpeg" />
                   <i
-                    class="bi bi-x-circle-fill position-absolute text-danger"
+                    className="bi bi-x-circle-fill position-absolute text-danger"
                     style={{
                       top: -10,
                       left: "4px",
@@ -162,7 +162,7 @@ function AdminEditProductPage() {
                 <Col style={{ position: "relative" }} md={3}>
                   <Image fluid src="/images/img1.jpeg" />
                   <i
-                    class="bi bi-x-circle-fill position-absolute text-danger"
+                    className="bi bi-x-circle-fill position-absolute text-danger"
                     style={{
                       top: -10,
                       left: "4px",

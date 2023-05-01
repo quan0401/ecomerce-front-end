@@ -29,7 +29,9 @@ function HeaderComponent() {
                 <Dropdown.Item>Something else</Dropdown.Item>
               </DropdownButton>
               <Form.Control type="text" placeholder="Normal text" />
-              <Button variant="warning">Warning</Button>
+              <Button variant="warning">
+                <i className="bi bi-search"></i>
+              </Button>
             </InputGroup>
           </Nav>
 
