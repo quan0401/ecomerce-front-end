@@ -148,7 +148,11 @@ function AdminEditProductPage() {
               <Form.Label>Images</Form.Label>
               <Row>
                 <Col style={{ position: "relative" }} md={3}>
-                  <Image fluid src="/images/img1.jpeg" />
+                  <Image
+                    crossOrigin="anonymous"
+                    fluid
+                    src="/images/img1.jpeg"
+                  />
                   <i
                     className="bi bi-x-circle-fill position-absolute text-danger"
                     style={{
@@ -160,7 +164,11 @@ function AdminEditProductPage() {
                   ></i>
                 </Col>
                 <Col style={{ position: "relative" }} md={3}>
-                  <Image fluid src="/images/img1.jpeg" />
+                  <Image
+                    crossOrigin="anonymous"
+                    fluid
+                    src="/images/img1.jpeg"
+                  />
                   <i
                     className="bi bi-x-circle-fill position-absolute text-danger"
                     style={{

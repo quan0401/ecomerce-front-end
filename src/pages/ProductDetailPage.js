@@ -36,7 +36,13 @@ function ProductDetailPage() {
           <Col style={{ zIndex: 1 }} md={4} className="p-4">
             {images.map((img, index) => (
               <div key={index} id={"img-" + index}>
-                <Image className="mb-3" src={img} rounded fluid />
+                <Image
+                  crossOrigin="anonymous"
+                  className="mb-3"
+                  src={img}
+                  rounded
+                  fluid
+                />
               </div>
             ))}
           </Col>

@@ -1,6 +1,5 @@
 import { Button, Form, Container, Row, Col, Alert } from "react-bootstrap";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 function UserProfilePage() {
   const [validated, setValidated] = useState(false);

@@ -62,6 +62,7 @@ function UserOrderDetailPage() {
               <ListGroup.Item className="py-3" key={index}>
                 <div className="d-flex align-items-center justify-content-between">
                   <Image
+                    crossOrigin="anonymous"
                     src={img}
                     width={120}
                     // height={60}
