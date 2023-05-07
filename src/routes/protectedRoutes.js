@@ -26,7 +26,7 @@ const routes = [
   { path: "/admin/analytics", Component: AdminAnalyticsPage },
   { path: "/admin/chats", Component: AdminChatsPage },
   { path: "/admin/create-new-product", Component: AdminCreateProductPage },
-  { path: "/admin/edit-product", Component: AdminEditProductPage },
+  { path: "/admin/edit-product/:id", Component: AdminEditProductPage },
   { path: "/admin/edit-user", Component: AdminEditUserPage },
   { path: "/admin/order-detail", Component: AdminOrderDetailsPage },
   { path: "/admin/my-orders", Component: AdminOrdersPage },

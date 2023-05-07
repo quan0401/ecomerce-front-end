@@ -9,6 +9,9 @@ import {
   Image,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { getCategories } from "../../service/categoryService";
+import { useEffect, useState } from "react";
+import { getProductById } from "../../service/productService";
 
 const categories = [
   "Electronics",
@@ -39,6 +42,25 @@ const categories = [
 ];
 
 function AdminEditProductPage() {
+  const [categories, setCategories] = useState([]);
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    const productId = window.location.pathname.split("/").pop();
+    getProductById(productId).then((product) => {
+      setProduct(product);
+    });
+  }, []);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    getCategories(abortController).then((res) => {
+      console.log(res);
+    });
+
+    return () => abortController.abort();
+  }, []);
+
   return (
     <Container>
       <Row className="justify-content-center mt-3">
@@ -55,22 +77,27 @@ function AdminEditProductPage() {
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
-              <Form.Control required type="text" />
+              <Form.Control placeholder={product.name} required type="text" />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
-              <Form.Control required as="textarea" rows={3} />
+              <Form.Control
+                placeholder={product.description}
+                required
+                as="textarea"
+                rows={3}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Count in stock</Form.Label>
-              <Form.Control required type="text" />
+              <Form.Control placeholder={product.count} required type="text" />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Price</Form.Label>
-              <Form.Control required type="text" />
+              <Form.Control placeholder={product.price} required type="text" />
             </Form.Group>
 
             <Form.Group className="my-3">
