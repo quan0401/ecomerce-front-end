@@ -8,6 +8,7 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
+import CartItemComponent from "../../components/CartItemComponent";
 
 const images = [
   "/images/img1.jpeg",
@@ -62,43 +63,17 @@ function UserCartDetailPage() {
           <h2>Order items</h2>
           <ListGroup variant="flush">
             {images.map((img, index) => (
-              <ListGroup.Item className="py-3" key={index}>
-                <div className="d-flex align-items-center justify-content-between">
-                  <Image
-                    crossOrigin="anonymous"
-                    src={img}
-                    width={120}
-                    // height={60}
-                    style={{
-                      objectFit: "cover",
-                      maxHeight: "180px",
-                      maxWidth: "140px",
-                    }}
-                  />
-
-                  <div style={{ maxWidth: "40%" }} name="description">
-                    <div className="fw-bold">Product1 Lenovo</div>
-                    <div>
-                      description description description description
-                      description description description
-                    </div>
-                  </div>
-
-                  <div className="fw-bold">200.000 VND</div>
-
-                  <div style={{ textAlign: "right" }}>
-                    <Form.Select>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                    </Form.Select>
-
-                    <Button variant="secondary" className="mt-4">
-                      <i className="bi bi-trash"></i>
-                    </Button>
-                  </div>
-                </div>
-              </ListGroup.Item>
+              <CartItemComponent
+                key={index}
+                item={{
+                  image: { path: "/images/tablets-category.png" },
+                  name: "Product name",
+                  price: 10,
+                  count: 10,
+                  quantity: 10,
+                }}
+                img={img}
+              />
             ))}
           </ListGroup>
         </Col>

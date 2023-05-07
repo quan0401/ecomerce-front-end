@@ -10,13 +10,13 @@ import {
   InputGroup,
   Button,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function HeaderComponent() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand as={Link} to="/home">
+        <Navbar.Brand as={NavLink} to="/home">
           Best Online-Shop
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -36,22 +36,22 @@ function HeaderComponent() {
           </Nav>
 
           <Nav>
-            <Nav.Link as={Link} to="/admin/my-orders">
+            <Nav.Link as={NavLink} to="/admin/my-orders">
               Admin
               <span className="position-absolute top-2 start-90 translate-middle p-2 bg-danger border border-light rounded-circle">
                 <span className="visually-hidden">New alerts</span>
               </span>
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/login">
+            <Nav.Link as={NavLink} to="/login">
               Login
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/register">
+            <Nav.Link as={NavLink} to="/register">
               Register
             </Nav.Link>
 
-            <Nav.Link as={Link} to="/cart">
+            <Nav.Link as={NavLink} to="/cart">
               <Badge pill bg="danger">
                 2
               </Badge>
@@ -61,16 +61,16 @@ function HeaderComponent() {
 
             <NavDropdown title="User Name" id="collasible-nav-dropdown">
               <NavDropdown.Item
-                as={Link}
+                as={NavLink}
                 eventKey="/user/my-orders"
                 to="/user/my-orders"
               >
                 My orders
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} eventKey="/user" to="/user">
+              <NavDropdown.Item as={NavLink} eventKey="/user" to="/user">
                 Profile
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} eventKey="/logout" to="/logout">
+              <NavDropdown.Item as={NavLink} eventKey="/logout" to="/logout">
                 Logout
               </NavDropdown.Item>
             </NavDropdown>

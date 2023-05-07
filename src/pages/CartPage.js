@@ -19,7 +19,9 @@ function CartPage() {
           <h1>Shopping Cart</h1>
           <ListGroup variant="flush">
             {images.map((img, index) => (
-              <CartItemComponent img={img} key={index} />
+              <div key={index}>
+                {/* <CartItemComponent img={img} key={index} /> */}
+              </div>
             ))}
 
             <Alert variant="info" className="m-3">

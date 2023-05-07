@@ -1,26 +1,16 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Col,
   Row,
   Form,
   Alert,
-  Image,
   Button,
   ListGroup,
 } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { getOrderById, maskOrderAsDelivered } from "../../service/orderService";
 import CartItemComponent from "../../components/CartItemComponent";
-
-const images = [
-  "/images/img1.jpeg",
-  "/images/img2.JPG",
-  "/images/img3.jpeg",
-  "/images/img4.jpeg",
-  "/images/img6.jpg",
-  "/images/img7.png",
-];
 
 function AdminOrderDetailsPage() {
   const { id: orderId } = useParams();
@@ -30,7 +20,7 @@ function AdminOrderDetailsPage() {
   const [cartItems, setCartItems] = useState([]);
 
   const handleMaskDeliver = async () => {
-    const result = await maskOrderAsDelivered(orderId);
+    await maskOrderAsDelivered(orderId);
     setDelivered(!delivered);
   };
 
@@ -99,7 +89,7 @@ function AdminOrderDetailsPage() {
           <h2>Order items</h2>
           <ListGroup variant="flush">
             {cartItems.map((item, index) => (
-              <CartItemComponent item={item} key={index} />
+              <CartItemComponent disabled item={item} key={index} />
             ))}
           </ListGroup>
         </Col>
