@@ -1,40 +1,46 @@
-import { Form, ListGroup, Button, Image } from "react-bootstrap";
+import { Form, ListGroup, Button, Image, Row, Col } from "react-bootstrap";
 
-function CartItemComponent({ img }) {
+function CartItemComponent({ img, item }) {
+  if (img === undefined) {
+    img = "/images/img1.jpeg";
+  }
   return (
     <ListGroup.Item className="py-4">
       <div className="d-md-flex justify-content-around align-items-center">
-        <Image
-          crossOrigin="anonymous"
-          src={img}
-          width={80}
-          height={40}
-          style={{ objectFit: "cover" }}
-        />
-        <div
-          style={{
-            width: "120px",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <span>Product1 lenovo</span>
-        </div>
-        <div className="fw-bold">200.000 VND</div>
-        <div>
-          <Form.Select aria-label="Default select example">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-          </Form.Select>
-        </div>
-        {/* Trash Button */}
-        <Button
-          variant="secondary"
-          onClick={() => window.confirm("Are you sure?")}
-        >
-          <i className="text-white bi bi-trash-fill"></i>
-        </Button>
+        <Row>
+          <Col md={3}>
+            <div>
+              <Image
+                crossOrigin="anonymous"
+                src={img}
+                fluid
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+          </Col>
+          <Col md={9}>
+            <div className="mt-3 mt-md-0">
+              Name: <b>{item.name}</b>{" "}
+            </div>
+            <div className="mt-3">
+              Price: <b>{item.price} $</b>
+            </div>
+            <Form.Select className="mt-3" aria-label="Default select example">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </Form.Select>
+            <div className="text-secondary mt-3">{item.count} in stock</div>
+            {/* Trash Button */}
+            <Button
+              className="mt-3"
+              variant="secondary"
+              onClick={() => window.confirm("Are you sure?")}
+            >
+              <i className="text-white bi bi-trash-fill"></i>
+            </Button>
+          </Col>
+        </Row>
       </div>
     </ListGroup.Item>
   );

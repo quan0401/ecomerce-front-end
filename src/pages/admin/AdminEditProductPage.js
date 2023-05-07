@@ -54,9 +54,7 @@ function AdminEditProductPage() {
 
   useEffect(() => {
     const abortController = new AbortController();
-    getCategories(abortController).then((res) => {
-      console.log(res);
-    });
+    getCategories(abortController).then((res) => {});
 
     return () => abortController.abort();
   }, []);

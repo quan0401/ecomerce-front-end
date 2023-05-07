@@ -25,7 +25,6 @@ function UserOrderDetailPage() {
   const { id: orderId } = useParams();
   const [order, setOrder] = useState({});
   const [user, setUser] = useState({});
-  console.log({ user, order });
 
   useEffect(() => {
     getOrderById(orderId).then((res) => {

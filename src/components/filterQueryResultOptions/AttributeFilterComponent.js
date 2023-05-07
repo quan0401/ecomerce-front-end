@@ -6,10 +6,6 @@ const attributes = [
 ];
 
 function AttributeFilterComponent() {
-  // attributes.map((attribute) => {
-  //   const key = Object.keys(attribute);
-  //   console.log(attribute[key]);
-  // });
   return (
     <Form>
       {attributes.map((attribute, index) => {
