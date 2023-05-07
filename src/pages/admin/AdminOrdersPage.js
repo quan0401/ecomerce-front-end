@@ -59,7 +59,9 @@ function AdminOrdersPage() {
                     )}
                   </td>
                   <td>
-                    <Link to="/user/order-detail">Go to order</Link>
+                    <Link to={"/user/order-detail/" + order._id}>
+                      Go to order
+                    </Link>
                   </td>
                 </tr>
               ))}

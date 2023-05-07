@@ -19,7 +19,7 @@ const routes = [
   // User Pages
   { path: "/user", Component: UserProfilePage },
   { path: "/user/cart-detail", Component: UserCartDetailPage },
-  { path: "/user/order-detail", Component: UserOrderDetailPage },
+  { path: "/user/order-detail/:id", Component: UserOrderDetailPage },
   { path: "/user/my-orders", Component: UserOrdersPage },
 
   // Admin Pages
@@ -28,7 +28,7 @@ const routes = [
   { path: "/admin/create-new-product", Component: AdminCreateProductPage },
   { path: "/admin/edit-product/:id", Component: AdminEditProductPage },
   { path: "/admin/edit-user", Component: AdminEditUserPage },
-  { path: "/admin/order-detail", Component: AdminOrderDetailsPage },
+  { path: "/admin/order-detail/:id", Component: AdminOrderDetailsPage },
   { path: "/admin/my-orders", Component: AdminOrdersPage },
   { path: "/admin/products", Component: AdminProductPage },
   { path: "/admin/users", Component: AdminUsersPage },

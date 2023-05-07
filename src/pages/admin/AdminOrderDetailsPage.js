@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Container,
   Col,
@@ -8,6 +9,8 @@ import {
   Button,
   ListGroup,
 } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import { getOrderById, maskOrderAsDelivered } from "../../service/orderService";
 
 const images = [
   "/images/img1.jpeg",
@@ -19,6 +22,23 @@ const images = [
 ];
 
 function AdminOrderDetailsPage() {
+  const { id: orderId } = useParams();
+  const [order, setOrder] = useState({});
+  const [user, setUser] = useState({});
+  const [delivered, setDelivered] = useState(false);
+
+  const handleMaskDeliver = async () => {
+    const result = await maskOrderAsDelivered(orderId);
+    setDelivered(!delivered);
+  };
+
+  useEffect(() => {
+    getOrderById(orderId).then((res) => {
+      setOrder(res);
+      setUser(res.user);
+      setDelivered(res.isDelivered);
+    });
+  }, [delivered]);
   return (
     <Container>
       <Row className="mt-3">
@@ -29,29 +49,45 @@ function AdminOrderDetailsPage() {
               <h2>Shipping</h2>
               <div>
                 <b>Name: </b>
-                John Doe
+                {user.firstName} {user.lastName}
               </div>
               <div>
                 <b>Address: </b>
-                HCM
+                {user.city}
               </div>
               <div>
                 <b>Phone: </b>
-                0912343248
+                {user.phoneNumber}
               </div>
-              <Alert variant="success">Not delivered</Alert>
+              {order.isDelivered === true ? (
+                <Alert className="mt-3" variant="success">
+                  Delivered
+                </Alert>
+              ) : (
+                <Alert className="mt-3" variant="danger">
+                  Not delivered
+                </Alert>
+              )}
             </Col>
             <Col md={6}>
               <h2>Payment method</h2>
-              <Form.Select>
+              <Form.Select value={order.paymentMethod} disabled>
                 <option value="4">Momo</option>
+                <option value={order.paymentMethod}>Cash on delivery</option>
                 <option value="2">Paypal</option>
                 <option value="1">
                   Cash on delivery (delivery may be delayed)
                 </option>
-                <option value="3">3</option>
               </Form.Select>
-              <Alert variant="success">Paid 10/02/2022</Alert>
+              {order.isPaid === true ? (
+                <Alert className="mt-3" variant="success">
+                  Paid at {order.paidAt.slice(0, 10)}
+                </Alert>
+              ) : (
+                <Alert className="mt-3" variant="danger">
+                  Not paid yet
+                </Alert>
+              )}
             </Col>
           </Row>
 
@@ -104,7 +140,7 @@ function AdminOrderDetailsPage() {
             <ListGroup.Item className="fs-2">Order summary</ListGroup.Item>
 
             <ListGroup.Item>
-              Price (after tax): <b>200.000 VND</b>
+              Price (after tax): <b>{order?.orderTotal?.cartSubTotal}</b>
             </ListGroup.Item>
 
             <ListGroup.Item>
@@ -117,11 +153,19 @@ function AdminOrderDetailsPage() {
 
             <ListGroup.Item className="text-danger">
               Total price:
-              <b> 200.000 VND</b>
+              <b> {order?.orderTotal?.cartSubTotal} $</b>
             </ListGroup.Item>
 
             <ListGroup.Item className="d-grid">
-              <Button variant="danger">Mask as</Button>
+              <Button
+                variant={order?.isDelivered === true ? "success" : "danger"}
+                disabled={order?.isDelivered === true}
+                onClick={() => handleMaskDeliver()}
+              >
+                {order?.isDelivered === false
+                  ? "Mask as delivered"
+                  : "Order is finished"}
+              </Button>
             </ListGroup.Item>
           </ListGroup>
         </Col>

@@ -8,7 +8,7 @@ import {
   CloseButton,
   Image,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getCategories } from "../../service/categoryService";
 import { useEffect, useState } from "react";
 import { getProductById } from "../../service/productService";
@@ -44,9 +44,9 @@ const categories = [
 function AdminEditProductPage() {
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({});
+  const { id: productId } = useParams();
 
   useEffect(() => {
-    const productId = window.location.pathname.split("/").pop();
     getProductById(productId).then((product) => {
       setProduct(product);
     });
