@@ -4,10 +4,10 @@ function SortOptionComponent() {
   return (
     <Form.Select aria-label="Default select example">
       <option>Sort by</option>
-      <option value="price1">Price: Low to high</option>
-      <option value="price-1">Price: High to Low</option>
-      <option value="name1">Name: A-Z</option>
-      <option value="name-1">Name: Z-A</option>
+      <option value="price_1">Price: Low to high</option>
+      <option value="price_-1">Price: High to Low</option>
+      <option value="name_1">Name: A-Z</option>
+      <option value="name_-1">Name: Z-A</option>
     </Form.Select>
   );
 }

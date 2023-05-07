@@ -6,6 +6,7 @@ import RatingFilterComponent from "../components/filterQueryResultOptions/Rating
 import CategoryFilterComponent from "../components/filterQueryResultOptions/CategoryFilterComponent";
 import AttributeFilterComponent from "../components/filterQueryResultOptions/AttributeFilterComponent";
 import ProductForListComponent from "../components/ProductForListComponent";
+import axios from "axios";
 
 const images = [
   "images/img1.jpeg",

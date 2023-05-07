@@ -3,8 +3,10 @@ import { Button, Toast, Form } from "react-bootstrap";
 
 function AdminChatRoomComponent() {
   const [showA, setShowA] = useState(true);
+  const [showB, setShowB] = useState(true);
 
   const toggleShowA = () => setShowA(!showA);
+  const toggleShowB = () => setShowB(!showB);
 
   return (
     <div className="d-flex">
@@ -58,11 +60,11 @@ function AdminChatRoomComponent() {
       </div>
 
       <div className="mb-4">
-        <Button onClick={toggleShowA} className="mb-2">
+        <Button onClick={toggleShowB} className="mb-2">
           Show chat with John Doe
         </Button>
 
-        <Toast show={showA} onClose={toggleShowA}>
+        <Toast show={showB} onClose={toggleShowB}>
           <Toast.Header>
             <strong className="me-auto">Chat with John Doe</strong>
             <small>11 mins ago</small>
