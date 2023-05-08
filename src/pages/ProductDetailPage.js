@@ -13,9 +13,17 @@ import { Rating } from "react-simple-star-rating";
 import { useEffect } from "react";
 import ImageZoom from "js-image-zoom";
 
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/actions/cartActions";
+
 const images = ["/images/img1.jpeg", "/images/img2.JPG", "/images/img3.jpeg"];
 
 function ProductDetailPage() {
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(addToCart());
+  };
+
   const option = {
     width: 400,
     zoomWidth: 500,
@@ -100,7 +108,11 @@ function ProductDetailPage() {
 
                   <ListGroup.Item>
                     <div className="d-grid gap-2">
-                      <Button variant="success" size="lg">
+                      <Button
+                        onClick={handleAddToCart}
+                        variant="success"
+                        size="lg"
+                      >
                         Add to cart
                       </Button>
                     </div>
