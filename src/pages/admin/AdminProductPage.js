@@ -26,7 +26,8 @@ function AdminOrdersPage() {
   useEffect(() => {
     const abortController = new AbortController();
     getProductsAdmin(abortController).then((res) => {
-      setProductList(res);
+      if (Array.isArray(res)) setProductList(res);
+      else toast.error(res);
     });
 
     return () => abortController.abort();

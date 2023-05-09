@@ -13,7 +13,7 @@ import { Rating } from "react-simple-star-rating";
 import { useEffect } from "react";
 import ImageZoom from "js-image-zoom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/actions/cartActions";
 
 const images = ["/images/img1.jpeg", "/images/img2.JPG", "/images/img3.jpeg"];
@@ -24,6 +24,7 @@ function ProductDetailPage() {
     dispatch(addToCart());
   };
 
+  const products = useSelector((state) => state.cart.value);
   const option = {
     width: 400,
     zoomWidth: 500,
@@ -48,6 +49,7 @@ function ProductDetailPage() {
                   crossOrigin="anonymous"
                   className="mb-3"
                   src={img}
+                  style={{ objectFit: "cover" }}
                   rounded
                   fluid
                 />

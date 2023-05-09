@@ -9,18 +9,43 @@ import {
 } from "react-bootstrap";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { registerUser } from "../service/userService";
 
 function RegisterPage() {
   const [validated, setValidated] = useState(false);
+  const [resgisterStatus, setRegisterStatus] = useState({ loading: false });
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  const handleSubmit = (e) => {
+    setRegisterStatus((prev) => ({ ...prev, loading: true }));
+    e.preventDefault();
+    e.stopPropagation();
+    const form = e.currentTarget.elements;
+    const {
+      firstName: { value: firstName },
+      lastName: { value: lastName },
+      email: { value: email },
+      password: { value: password },
+      repeatPassword: { value: repeatPassword },
+    } = form;
 
-    setValidated(true);
+    if (
+      e.currentTarget.checkValidity() === true &&
+      firstName &&
+      lastName &&
+      email &&
+      password &&
+      repeatPassword === password
+    ) {
+      registerUser({
+        firstName,
+        lastName,
+        email,
+        password,
+      }).then((res) => {
+        setRegisterStatus((prev) => ({ ...prev, loading: false }));
+        console.log(res);
+      });
+    } else setRegisterStatus((prev) => ({ ...prev, loading: false }));
   };
 
   return (
@@ -28,7 +53,7 @@ function RegisterPage() {
       <Row className="justify-content-md-center mt-3">
         <Col md={6}>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicFirstName">
+            <Form.Group className="mb-3">
               <Form.Label className="fw-bold">First name</Form.Label>
               <Form.Control
                 required
@@ -41,7 +66,7 @@ function RegisterPage() {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicLastName">
+            <Form.Group className="mb-3">
               <Form.Label className="fw-bold">Last name</Form.Label>
               <Form.Control
                 required
@@ -54,7 +79,7 @@ function RegisterPage() {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label className="fw-bold">Email address</Form.Label>
               <Form.Control
                 required
@@ -67,7 +92,7 @@ function RegisterPage() {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3">
               <Form.Label className="fw-bold">Password</Form.Label>
               <Form.Control
                 required
@@ -79,9 +104,10 @@ function RegisterPage() {
               <Form.Control.Feedback type="invalid">
                 Please enter password.
               </Form.Control.Feedback>
+              <Form.Text>Password should have 8 characters</Form.Text>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicRepeatPassword">
+            <Form.Group className="mb-3">
               <Form.Label className="fw-bold">Repeat Password</Form.Label>
               <Form.Control
                 required
@@ -105,7 +131,11 @@ function RegisterPage() {
             </Row>
             <Button type="submit">
               Submit
-              <Spinner animation="border" role="status" size="sm" />
+              {resgisterStatus?.loading === true ? (
+                <Spinner animation="border" role="status" size="sm" />
+              ) : (
+                ""
+              )}
             </Button>
           </Form>
           <Alert>User created</Alert>

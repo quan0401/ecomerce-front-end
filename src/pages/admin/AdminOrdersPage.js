@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AdminLinksComponent from "../../components/admin/AdminLinksComponent";
 import { useEffect, useState } from "react";
 import { getOrdersAdmin } from "../../service/orderService";
+import { toast } from "react-toastify";
 
 function AdminOrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -15,7 +16,8 @@ function AdminOrdersPage() {
   useEffect(() => {
     const abortController = new AbortController();
     getOrdersAdmin(abortController).then((res) => {
-      setOrders(res);
+      if (Array.isArray(res)) setOrders(res);
+      else toast.error(res);
     });
     return () => abortController.abort();
   }, []);

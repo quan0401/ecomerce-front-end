@@ -1,5 +1,13 @@
 import instance from "../axios/setup";
 
+export const loginUser = async (loginData) => {
+  return await instance.post("/api/users/login", { ...loginData });
+};
+
+export const registerUser = async (data) => {
+  return await instance.post("/api/users/register", { ...data });
+};
+
 export const getUsers = async (abortController) => {
   const result = await instance.get("/api/users", {
     signal: abortController.signal,
@@ -8,6 +16,6 @@ export const getUsers = async (abortController) => {
 };
 
 export const deleteUser = async (userId) => {
-  const result = instance.delete(`/api/users/` + userId);
+  const result = await instance.delete(`/api/users/` + userId);
   return result;
 };

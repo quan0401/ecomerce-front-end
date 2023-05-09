@@ -3,6 +3,7 @@ import AdminLinksComponent from "../../../components/admin/AdminLinksComponent";
 import { Link } from "react-router-dom";
 import { deleteUser, getUsers } from "../../../service/userService";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function UserPageComponent() {
   const [users, setUsers] = useState([]);
@@ -21,7 +22,8 @@ function UserPageComponent() {
   useEffect(() => {
     const abortController = new AbortController();
     getUsers(abortController).then((res) => {
-      setUsers(res);
+      if (Array.isArray(res)) setUsers(res);
+      else toast.error(res);
     });
     return () => abortController.abort();
   }, [userDelete]);

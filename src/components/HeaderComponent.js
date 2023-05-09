@@ -67,7 +67,7 @@ function HeaderComponent() {
               >
                 My orders
               </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} eventKey="/user" to="/user">
+              <NavDropdown.Item as={NavLink} eventKey="/user" to="/user/">
                 Profile
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} eventKey="/logout" to="/logout">

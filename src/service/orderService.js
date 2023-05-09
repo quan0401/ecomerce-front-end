@@ -1,13 +1,15 @@
 import instance from "../axios/setup";
 
 export const getOrdersAdmin = async (AbortController) => {
-  return instance.get("/api/orders/admin", { signal: AbortController.signal });
+  return await instance.get("/api/orders/admin", {
+    signal: AbortController.signal,
+  });
 };
 
 export const getOrderById = async (id) => {
-  return instance.get("/api/orders/user/" + id);
+  return await instance.get("/api/orders/user/" + id);
 };
 
-export const maskOrderAsDelivered = (id) => {
-  return instance.put("/api/orders/delivered/" + id);
+export const maskOrderAsDelivered = async (id) => {
+  return await instance.put("/api/orders/delivered/" + id);
 };

@@ -1,16 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
+function ProtectedRoutesComponent({ admin, token }) {
+  if (admin === true && token && token.isAdmin === true) return <Outlet />;
+  else if (admin === false && token && token.isAdmin === false)
+    return <Outlet />;
 
-function ProtectedRoutesComponent({ admin }) {
-  let auth = false;
-  if (admin) {
-    const adminAuth = true;
-    if (adminAuth) auth = true;
-  } else {
-    const userAuth = true;
-    if (userAuth) auth = true;
-  }
-
-  return auth ? <Outlet /> : <Navigate to="/login" />;
+  return <Navigate to="/login" />;
 }
 
 export default ProtectedRoutesComponent;

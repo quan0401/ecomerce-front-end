@@ -4,7 +4,8 @@ import publicRoutes from "./routes/publicRoutes";
 
 import ProtectedRoutesComponent from "./components/ProtectedRoutesComponent";
 
-import protectedRoutes from "./routes/protectedRoutes";
+import adminProtectedRoutes from "./routes/adminProtectedRoutes";
+import userProtectedRoutes from "./routes/userProtectedRoutes";
 
 import RoutesUserChatComponent from "./components/user/RoutesUserChatComponent";
 
@@ -12,10 +13,22 @@ import HeaderComponent from "./components/HeaderComponent";
 import FooterComponent from "./components/FooterComponent";
 import ScrollToTop from "./utils/ScrollToTop";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useState, useEffect } from "react";
+import { getToken } from "./service/cookieService";
+import { useSelector } from "react-redux";
 
 function App() {
+  const [token, setToken] = useState();
+  const {
+    userRegisterLogin: { userInfo },
+  } = useSelector((state) => state);
+  useEffect(() => {
+    getToken().then((res) => setToken(res));
+  }, [userInfo]);
+  console.log(userInfo);
+
   return (
     <div className="App">
       {/* Public routes */}
@@ -34,25 +47,43 @@ function App() {
             ))}
           </Route>
 
-          {/* User and admin routes */}
-          {protectedRoutes.map((route, index) => {
-            let isAdminRoute = false;
-            if (route.path.startsWith("/admin")) {
-              isAdminRoute = true;
-            }
-            return (
+          {/* User protected routes */}
+          {token && (
+            <>
               <Route
-                key={"parent-route"}
-                element={<ProtectedRoutesComponent admin={isAdminRoute} />}
+                element={
+                  <ProtectedRoutesComponent admin={false} token={token} />
+                }
               >
-                <Route
-                  key={index}
-                  path={route.path}
-                  element={<route.Component />}
-                />
+                {userProtectedRoutes.map((route, index) => {
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={<route.Component />}
+                    />
+                  );
+                })}
               </Route>
-            );
-          })}
+
+              {/* Admin routes */}
+              <Route
+                element={
+                  <ProtectedRoutesComponent admin={true} token={token} />
+                }
+              >
+                {adminProtectedRoutes.map((route, index) => {
+                  return (
+                    <Route
+                      key={index}
+                      path={route.path}
+                      element={<route.Component />}
+                    />
+                  );
+                })}
+              </Route>
+            </>
+          )}
         </Routes>
         <FooterComponent />
       </Router>
