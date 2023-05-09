@@ -43,7 +43,6 @@ function RegisterPage() {
         password,
       }).then((res) => {
         setRegisterStatus((prev) => ({ ...prev, loading: false }));
-        console.log(res);
       });
     } else setRegisterStatus((prev) => ({ ...prev, loading: false }));
   };

@@ -24,10 +24,10 @@ function App() {
   const {
     userRegisterLogin: { userInfo },
   } = useSelector((state) => state);
+
   useEffect(() => {
     getToken().then((res) => setToken(res));
   }, [userInfo]);
-  console.log(userInfo);
 
   return (
     <div className="App">

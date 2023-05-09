@@ -7,23 +7,18 @@ import {
   Alert,
   Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-import { useSelector } from "react-redux";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
   const [validated, setValidated] = useState(false);
-  const navigate = useNavigate();
 
   const [loginStatus, setLoginStatus] = useState({
     loading: false,
     userLoggedIn: {},
   });
-  const test = useSelector((state) => state.userRegisterLogin);
 
   const handleSubmit = (event) => {
-    setLoginStatus((prev) => ({ ...prev, loading: true }));
     event.preventDefault();
     event.stopPropagation();
     const form = event.currentTarget.elements;
@@ -32,6 +27,7 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
     const doNotLogout = form.doNotLogOut.checked;
 
     if (event.currentTarget.checkValidity() === true && email && password) {
+      setLoginStatus((prev) => ({ ...prev, loading: true }));
       loginUser({ email, password, doNotLogout }).then((res) => {
         if (res.EC === 0) {
           const loginUserData = res.userLoggedIn;
@@ -43,18 +39,15 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
             localStorage.setItem("userInfo", JSON.stringify(loginUserData));
           else
             sessionStorage.setItem("userInfo", JSON.stringify(loginUserData));
-          navigate("/user/my-orders", { replace: true });
+
+          // Use window.location if useNavigate not work
+          if (loginUserData.isAdmin) window.location.href = "/admin/my-orders";
+          else window.location.href = "/user/";
+          setLoginStatus((prev) => ({ ...prev, loading: false }));
         }
       });
-      setLoginStatus((prev) => ({ ...prev, loading: false }));
     }
   };
-
-  useEffect(() => {
-    if (test._id) {
-      navigate("/user/my-orders", { replace: true });
-    }
-  });
 
   return (
     <Container>

@@ -11,7 +11,7 @@ import AdminCreateProductPage from "../pages/admin/AdminCreateProductPage";
 import AdminEditProductPage from "../pages/admin/AdminEditProductPage";
 import AdminOrderDetailsPage from "../pages/admin/AdminOrderDetailsPage";
 import AdminOrdersPage from "../pages/admin/AdminOrdersPage";
-import AdminProductPage from "../pages/admin/AdminProductPage";
+import AdminProductPage from "../pages/admin/AdminProducstPage";
 import AdminUsersPage from "../pages/admin/AdminUsersPage";
 import AdminEditUserPage from "../pages/admin/AdminEditUserPage";
 

@@ -1,11 +1,15 @@
 import { Table, Container, Row, Col, Button } from "react-bootstrap";
 import AdminLinksComponent from "../../../components/admin/AdminLinksComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteUser, getUsers } from "../../../service/userService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-function UserPageComponent() {
+import { logoutState } from "../../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
+function AdminUserPageComponent() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [userDelete, setUserDelete] = useState(false);
 
@@ -21,10 +25,18 @@ function UserPageComponent() {
 
   useEffect(() => {
     const abortController = new AbortController();
-    getUsers(abortController).then((res) => {
-      if (Array.isArray(res)) setUsers(res);
-      else toast.error(res);
-    });
+    getUsers(abortController)
+      .then((res) => {
+        if (Array.isArray(res)) setUsers(res);
+      })
+      .catch((error) => {
+        toast.error(error);
+        dispatch(
+          logoutState(function () {
+            navigate("/login");
+          })
+        );
+      });
     return () => abortController.abort();
   }, [userDelete]);
 
@@ -100,4 +112,4 @@ function UserPageComponent() {
   );
 }
 
-export default UserPageComponent;
+export default AdminUserPageComponent;

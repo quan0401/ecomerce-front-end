@@ -1,6 +1,6 @@
 import { Table, Container, Row, Col, Button } from "react-bootstrap";
 import AdminLinksComponent from "../../components/admin/AdminLinksComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   deleteProductAdmin,
@@ -9,7 +9,12 @@ import {
 
 import { toast } from "react-toastify";
 
-function AdminOrdersPage() {
+import { logoutState } from "../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
+
+function AdminProducstPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [productList, setProductList] = useState([]);
   const [deleteProduct, setDeleteProduct] = useState(false);
 
@@ -25,10 +30,19 @@ function AdminOrdersPage() {
 
   useEffect(() => {
     const abortController = new AbortController();
-    getProductsAdmin(abortController).then((res) => {
-      if (Array.isArray(res)) setProductList(res);
-      else toast.error(res);
-    });
+    getProductsAdmin(abortController)
+      .then((res) => {
+        if (Array.isArray(res)) setProductList(res);
+      })
+      .catch((error) => {
+        toast.error(error);
+
+        dispatch(
+          logoutState(function () {
+            navigate("/login");
+          })
+        );
+      });
 
     return () => abortController.abort();
   }, [deleteProduct]);
@@ -92,4 +106,4 @@ function AdminOrdersPage() {
   );
 }
 
-export default AdminOrdersPage;
+export default AdminProducstPage;

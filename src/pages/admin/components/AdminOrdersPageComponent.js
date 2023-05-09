@@ -1,4 +1,15 @@
+import { Table, Container, Row, Col } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
+import { getOrdersAdmin } from "../../../service/orderService";
+import AdminLinksComponent from "../../../components/admin/AdminLinksComponent";
+
+import { logoutState } from "../../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
+
+function AdminOrdersPageComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
@@ -15,6 +26,7 @@
         if (Array.isArray(res)) setOrders(res);
       })
       .catch((error) => {
+        toast.error(error);
         dispatch(
           logoutState(function () {
             navigate("/login");
@@ -75,7 +87,6 @@
       </Row>
     </Container>
   );
+}
 
- 
-toast.error(res)
- 
+export default AdminOrdersPageComponent;

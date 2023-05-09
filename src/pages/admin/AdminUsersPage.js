@@ -1,7 +1,7 @@
-import UserPageComponent from "./components/UserPageComponent";
+import AdminUserPageComponent from "./components/AdminUserPageComponent";
 
 function AdminUsersPage() {
-  return <UserPageComponent />;
+  return <AdminUserPageComponent />;
 }
 
 export default AdminUsersPage;

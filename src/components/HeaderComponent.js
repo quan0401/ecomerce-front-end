@@ -10,9 +10,18 @@ import {
   InputGroup,
   Button,
 } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+import { logoutState } from "../redux/actions/userActions";
 
 function HeaderComponent() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const callbackLogout = () => {
+    navigate("/login");
+  };
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
@@ -70,7 +79,11 @@ function HeaderComponent() {
               <NavDropdown.Item as={NavLink} eventKey="/user" to="/user/">
                 Profile
               </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} eventKey="/logout" to="/logout">
+              <NavDropdown.Item
+                onClick={() => {
+                  dispatch(logoutState(callbackLogout));
+                }}
+              >
                 Logout
               </NavDropdown.Item>
             </NavDropdown>
