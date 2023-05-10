@@ -7,15 +7,23 @@ import {
   Alert,
   Spinner,
 } from "react-bootstrap";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useSelector } from "react-redux";
 
 function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
+  const navigate = useNavigate();
+  const test = useSelector((state) => state.userRegisterLogin.userInfo);
+
   const [validated, setValidated] = useState(false);
 
   const [loginStatus, setLoginStatus] = useState({
     loading: false,
     userLoggedIn: {},
+  });
+  useEffect(() => {
+    if (JSON.stringify(test) !== "{}") navigate("/home", { replace: true });
   });
 
   const handleSubmit = (event) => {
@@ -41,8 +49,8 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
             sessionStorage.setItem("userInfo", JSON.stringify(loginUserData));
 
           // Use window.location if useNavigate not work
-          if (loginUserData.isAdmin) window.location.href = "/admin/my-orders";
-          else window.location.href = "/user/";
+          if (loginUserData.isAdmin) navigate("/admin/my-orders");
+          else navigate("/user");
           setLoginStatus((prev) => ({ ...prev, loading: false }));
         }
       });

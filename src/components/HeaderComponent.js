@@ -26,7 +26,7 @@ function HeaderComponent() {
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand as={NavLink} to="/home">
-          Best Online-Shop
+          Online-Shop
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -76,7 +76,7 @@ function HeaderComponent() {
               >
                 My orders
               </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} eventKey="/user" to="/user/">
+              <NavDropdown.Item as={NavLink} to="/user/">
                 Profile
               </NavDropdown.Item>
               <NavDropdown.Item

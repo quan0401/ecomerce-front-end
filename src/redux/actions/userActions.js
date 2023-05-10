@@ -8,7 +8,9 @@ export const setReduxUserState = (user) => (dispatch) => {
 };
 
 export const logoutState = (callback) => (dispatch) => {
-  if (typeof callback === "function") callback();
+  if (typeof callback === "function") {
+    callback();
+  }
   localStorage.removeItem("userInfo");
   sessionStorage.removeItem("userInfo");
   clearToken().then((res) => {});

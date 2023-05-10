@@ -17,7 +17,9 @@ const routes = [
   {
     path: "*",
     Component: function () {
-      return <h1>Page not exist 404</h1>;
+      return (
+        <h1 className="text-align-center">Need to login or page not exist</h1>
+      );
     },
   },
 ];

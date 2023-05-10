@@ -1,7 +1,19 @@
 import { Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
+import { useNavigate } from "react-router-dom";
+import { logoutState } from "../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
+
 function AdminLinksComponent() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const hanleLougout = () => {
+    window.location.href = "/login";
+    dispatch(logoutState());
+  };
+
   return (
     <Navbar>
       <Nav
@@ -30,7 +42,7 @@ function AdminLinksComponent() {
           <Nav.Link>Analytics</Nav.Link>
         </LinkContainer>
 
-        <LinkContainer to="/logout">
+        <LinkContainer to="/logout" onClick={hanleLougout}>
           <Nav.Link>Logout</Nav.Link>
         </LinkContainer>
       </Nav>
