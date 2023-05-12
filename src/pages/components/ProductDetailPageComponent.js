@@ -16,15 +16,21 @@ import { Rating } from "react-simple-star-rating";
 import { useEffect, useState } from "react";
 
 import ImageZoom from "js-image-zoom";
+
 import { useParams } from "react-router-dom";
 
 const images = ["/images/img1.jpeg", "/images/img2.JPG", "/images/img3.jpeg"];
 
 function ProductDetailPageComponent({ addToCartRedux, products }) {
   const { id } = useParams();
+
   const [quantity, setQuantity] = useState(1);
+
+  const [showMessage, setShowMessage] = useState(false);
+
   const addToCartHandler = () => {
     addToCartRedux(id, +quantity);
+    setShowMessage(true);
   };
 
   const option = {
@@ -43,9 +49,12 @@ function ProductDetailPageComponent({ addToCartRedux, products }) {
 
   return (
     <Container>
-      <AddedToCartMessageComponent />
+      <AddedToCartMessageComponent
+        show={showMessage}
+        setShow={setShowMessage}
+      />
 
-      <Row>
+      <Row className="mt-3">
         <Col style={{ zIndex: 1 }} md={4} className="p-4">
           {images.map((img, index) => (
             <div key={index} id={"img-" + index}>

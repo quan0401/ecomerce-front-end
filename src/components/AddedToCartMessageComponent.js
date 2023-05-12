@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Alert, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function AddedToCartMessageComponent() {
-  const [show, setShow] = useState(true);
+function AddedToCartMessageComponent({ show, setShow }) {
+  // const [show, setShow] = useState(true);
+  const navigate = useNavigate();
   return (
     <Alert
       show={show}
@@ -17,8 +18,13 @@ function AddedToCartMessageComponent() {
         nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis
         consectetur purus sit amet fermentum.
       </p> */}
+      <Button variant="danger" onClick={() => navigate(-1)}>
+        Go Back
+      </Button>
       <Link to="/cart">
-        <Button variant="danger">Go to cart</Button>
+        <Button className="ms-2" variant="warning">
+          Go to cart
+        </Button>
       </Link>
     </Alert>
   );

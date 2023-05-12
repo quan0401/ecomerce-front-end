@@ -26,6 +26,8 @@ function HeaderComponent() {
 
   const { userInfo } = useSelector((state) => state.userRegisterLogin);
 
+  const { itemsCount } = useSelector((state) => state.cart);
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
@@ -74,7 +76,7 @@ function HeaderComponent() {
               <>
                 <Nav.Link as={NavLink} to="/cart">
                   <Badge pill bg="danger">
-                    2
+                    {itemsCount !== 0 && itemsCount}
                   </Badge>
                   <i className="bi bi-cart"></i>
                   <span className="ms-1">Cart</span>

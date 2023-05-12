@@ -1,9 +1,12 @@
 import * as actionTypes from "../constans/cartConstants";
 
+const localStorageCart = JSON.parse(localStorage.getItem("cart"));
+console.log({ localStorageCart });
+
 const CART_INIT_STATE = {
-  cartItems: [],
-  itemsCount: 0,
-  cartSubtotal: 0,
+  cartItems: localStorageCart?.cartItems || [],
+  itemsCount: localStorageCart?.itemsCount || 0,
+  cartSubtotal: localStorageCart?.cartSubtotal || 0,
 };
 
 export const cartReducer = (state = CART_INIT_STATE, action) => {
