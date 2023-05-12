@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setReduxUserState } from "../../redux/actions/userActions";
 
 function UserProfilePage() {
+  console.log("test");
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.userRegisterLogin);
   return (
