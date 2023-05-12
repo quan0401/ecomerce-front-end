@@ -19,3 +19,12 @@ export const deleteUser = async (userId) => {
   const result = await instance.delete(`/api/users/` + userId);
   return result;
 };
+
+export const getProfileApi = async (userId) => {
+  return await instance.get("/api/users/profile/" + userId);
+};
+
+export const updateProfileApi = async (updatedInfo) => {
+  const result = await instance.put("/api/users/profile", { ...updatedInfo });
+  return result;
+};

@@ -7,17 +7,27 @@ import {
   Alert,
   Spinner,
 } from "react-bootstrap";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
+
 import { toast } from "react-toastify";
+
+import { useSelector } from "react-redux";
 
 function RegisterPageComponent({ registerUser }) {
   const navigate = useNavigate();
+
   const [validated, setValidated] = useState(false);
+
   const [resgisterStatus, setRegisterStatus] = useState({ loading: false });
+
   const [passwordMatchState, setPasswordMatchState] = useState(true);
+
   const comparePassword = (e) => {
     const { value: password } = document.querySelector("input[name=password]");
+
     const { value: repeatPassword } = document.querySelector(
       "input[name=repeatPassword]"
     );
@@ -29,11 +39,21 @@ function RegisterPageComponent({ registerUser }) {
     }
   };
 
+  const { userInfo } = useSelector((state) => state.userRegisterLogin.userInfo);
+
+  useEffect(() => {
+    if (JSON.stringify(userInfo) !== "{}") navigate("/home", { replace: true });
+  }, []);
+
   const handleSubmit = (e) => {
     setRegisterStatus((prev) => ({ ...prev, loading: true }));
+
     e.preventDefault();
+
     e.stopPropagation();
+
     const form = e.currentTarget.elements;
+
     const {
       firstName: { value: firstName },
       lastName: { value: lastName },
@@ -59,11 +79,15 @@ function RegisterPageComponent({ registerUser }) {
         .then((res) => {
           if (res.EC === 0) {
             setRegisterStatus((prev) => ({ ...prev, loading: false }));
+
+            toast.success(res.EM);
+
             navigate("/login");
           }
         })
         .catch((error) => {
           toast.error(error.EM);
+
           setRegisterStatus((prev) => ({ ...prev, loading: false }));
         });
     } else setRegisterStatus((prev) => ({ ...prev, loading: false }));

@@ -5,7 +5,9 @@ export const userRegisterLoginReducer = (state = {}, action) => {
     case actionTypes.LOGIN_USER:
       return { ...state, userInfo: action.payload };
     case actionTypes.LOGOUT_USER:
-      return {};
+      // if (JSON.stringify(checkLoginToNavigate) !== "{}")
+      //   navigate("/home", { replace: true });
+      return { userInfo: {} };
     default:
       return state;
   }

@@ -7,14 +7,16 @@ import {
   Alert,
   Spinner,
 } from "react-bootstrap";
+
 import { useEffect, useState } from "react";
+
 import { Link, useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
   const navigate = useNavigate();
-  const test = useSelector((state) => state.userRegisterLogin.userInfo);
 
   const [validated, setValidated] = useState(false);
 
@@ -22,38 +24,54 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
     loading: false,
     userLoggedIn: {},
   });
+
+  const { userInfo } = useSelector((state) => state.userRegisterLogin);
+
   useEffect(() => {
-    if (JSON.stringify(test) !== "{}") navigate("/home", { replace: true });
-  });
+    if (JSON.stringify(userInfo) !== "{}") navigate("/home", { replace: true });
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     event.stopPropagation();
+
     const form = event.currentTarget.elements;
+
     const email = form.email.value;
+
     const password = form.password.value;
+
     const doNotLogout = form.doNotLogOut.checked;
 
     if (event.currentTarget.checkValidity() === true && email && password) {
       setLoginStatus((prev) => ({ ...prev, loading: true }));
-      loginUser({ email, password, doNotLogout }).then((res) => {
-        if (res.EC === 0) {
-          const loginUserData = res.userLoggedIn;
-          setLoginStatus((prev) => ({ ...prev, ...res, loading: false }));
 
-          reduxDispatch(setReduxUserState(loginUserData));
+      loginUser({ email, password, doNotLogout })
+        .then((res) => {
+          if (res.EC === 0) {
+            const loginUserData = res.userLoggedIn;
 
-          if (loginUserData.doNotLogout)
-            localStorage.setItem("userInfo", JSON.stringify(loginUserData));
-          else
-            sessionStorage.setItem("userInfo", JSON.stringify(loginUserData));
+            setLoginStatus((prev) => ({ ...prev, ...res, loading: false }));
 
-          // Use window.location if useNavigate not work
-          if (loginUserData.isAdmin) navigate("/admin/my-orders");
-          else navigate("/user");
+            reduxDispatch(setReduxUserState(loginUserData));
+
+            if (loginUserData.doNotLogout)
+              localStorage.setItem("userInfo", JSON.stringify(loginUserData));
+            else
+              sessionStorage.setItem("userInfo", JSON.stringify(loginUserData));
+
+            // Use window.location if useNavigate not work
+            if (loginUserData.isAdmin) navigate("/admin/my-orders");
+            else navigate("/user");
+
+            setLoginStatus((prev) => ({ ...prev, loading: false }));
+          }
+        })
+        .catch((error) => {
+          toast.error(error.EM);
           setLoginStatus((prev) => ({ ...prev, loading: false }));
-        }
-      });
+        });
     }
   };
 
@@ -73,6 +91,7 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
                 placeholder="Enter email address"
                 name="email"
               />
+
               <Form.Control.Feedback type="invalid">
                 Please enter a valid email.
               </Form.Control.Feedback>
@@ -87,6 +106,7 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
                 name="password"
                 minLength={8}
               />
+
               <Form.Control.Feedback type="invalid">
                 Please enter password.
               </Form.Control.Feedback>
