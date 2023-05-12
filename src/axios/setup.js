@@ -1,5 +1,6 @@
 import axios from "axios";
-import { clearToken } from "../service/cookieService";
+import store from "../redux/store";
+import { logoutState } from "../redux/actions/userActions";
 
 const instance = axios.create({});
 
@@ -25,6 +26,9 @@ instance.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     // return Promise.reject(error);
+    const status = error.response.status;
+
+    if (error.response.status) store.dispatch(logoutState());
     return Promise.reject(error.response.data);
   }
 );

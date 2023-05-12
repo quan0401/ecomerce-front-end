@@ -1,31 +1,41 @@
 import { Button, Card, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Rating } from "react-simple-star-rating";
+const images = [
+  "images/img1.jpeg",
+  "images/img2.JPG",
+  "images/img3.jpeg",
+  "images/img4.jpeg",
+  "images/img6.jpg",
+  "images/img7.png",
+];
 
-function ProductForListComponent({ id, img }) {
+function ProductForListComponent({ item }) {
   return (
     <Card>
       <Row>
         <Col xl={12} lg={5}>
           <Card.Img
-            style={{ height: "300px", objectFit: "cover" }}
+            style={{ objectFit: "cover" }}
             variant="top"
-            src={img}
+            src={images[0]}
           />
         </Col>
 
         <Col xl={12} lg={7}>
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
-            <Card.Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </Card.Text>
-            <Rating initialValue={5} className="mb-3" readonly size={24} />
-            <span style={{ fontSize: "20px" }}>(1)</span>
+            <Card.Title>{item.className}</Card.Title>
+            <Card.Text>{item.description}</Card.Text>
+            <Rating
+              initialValue={item.rating}
+              className="mb-3"
+              readonly
+              size={24}
+            />
+            <span>({item.reviewsNumber})</span>
             <br />
-            <Card.Text className="fw-bold size fs-4">120.000 VND</Card.Text>
-            <Link to="/product-detail/1">
+            <Card.Text className="fw-bold size fs-4">{item.price} $</Card.Text>
+            <Link to={`/product-detail/${item._id}`}>
               <Button variant="danger">See Product</Button>
             </Link>
           </Card.Body>

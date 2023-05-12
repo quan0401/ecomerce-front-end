@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     getToken().then((res) => setToken(res));
-  }, [userInfo]);
+  }, [userInfo._id]);
 
   return (
     <div className="App">

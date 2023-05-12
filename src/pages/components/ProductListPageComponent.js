@@ -19,7 +19,7 @@ const images = [
 
 function ProductListPageComponent({ getProductsApi }) {
   const [products, setProducts] = useState([]);
-  console.log(products);
+
   useEffect(() => {
     getProductsApi().then((res) => {
       setProducts(res.products);
@@ -60,9 +60,12 @@ function ProductListPageComponent({ getProductsApi }) {
         </Col>
         <Col md={9}>
           <Row xxl={3} xl={2} className="g-3">
-            {images.map((item, index) => (
-              <ProductForListComponent img={item} key={index} />
+            {products.map((product, index) => (
+              <ProductForListComponent item={product} key={index} />
             ))}
+            {/* {images.map((item, index) => (
+              <ProductForListComponent img={item} key={index} />
+            ))} */}
           </Row>
           <div className="mt-3 d-flex justify-content-center">
             <PaginationComponent />
