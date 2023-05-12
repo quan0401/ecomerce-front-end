@@ -13,3 +13,5 @@ export const deleteProductAdmin = async (productId) => {
 export const getProductById = async (productId) => {
   return await instance.get("/api/products/get-one/" + productId);
 };
+
+export const getProductsApi = async () => await instance.get("/api/products");
