@@ -24,7 +24,7 @@ function ProductForListComponent({ item }) {
 
         <Col xl={12} lg={7}>
           <Card.Body>
-            <Card.Title>{item.className}</Card.Title>
+            <Card.Title>{item.name}</Card.Title>
             <Card.Text>{item.description}</Card.Text>
             <Rating
               initialValue={item.rating}

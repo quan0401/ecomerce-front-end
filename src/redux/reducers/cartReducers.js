@@ -1,7 +1,6 @@
 import * as actionTypes from "../constans/cartConstants";
 
 const localStorageCart = JSON.parse(localStorage.getItem("cart"));
-console.log({ localStorageCart });
 
 const CART_INIT_STATE = {
   cartItems: localStorageCart?.cartItems || [],
@@ -26,15 +25,38 @@ export const cartReducer = (state = CART_INIT_STATE, action) => {
         newState.itemsCount += +payload.quantity;
 
         newState.cartSubtotal += +payload.quantity * +payload.price;
-      } else {
+      } else if (!payload.changeQuantiy) {
         productAlreadyExistsInState.quantity += +payload.quantity;
 
         newState.itemsCount += +payload.quantity;
 
         newState.cartSubtotal += +payload.quantity * +payload.price;
+      } else {
+        // Change the quantiy and re-calculate
+        productAlreadyExistsInState.quantity = +payload.quantity;
+        newState.itemsCount = 0;
+
+        newState.cartSubtotal = newState.cartItems.reduce(
+          (acc, currentValue) => {
+            newState.itemsCount += currentValue.quantity;
+            return acc + currentValue.quantity * currentValue.price;
+          },
+          0
+        );
       }
 
       return newState;
+    }
+    case actionTypes.REMOVE_FROM_CART: {
+      const { productId, quantity, price } = action.payload;
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(
+          (item) => item.productId !== productId
+        ),
+        itemsCount: state.itemsCount - quantity,
+        cartSubtotal: state.cartSubtotal - quantity * price,
+      };
     }
     default:
       return state;

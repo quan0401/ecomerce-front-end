@@ -1,6 +1,7 @@
-import { Container, Row, Col, ListGroup, Button, Alert } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import CartItemComponent from "../components/CartItemComponent";
+import CartPageComponent from "./components/CartPageComponent";
+
+import { addToCart, removeFromCart } from "../redux/actions/cartActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const images = [
   "/images/img1.jpeg",
@@ -12,45 +13,16 @@ const images = [
 ];
 
 function CartPage() {
+  const dispatch = useDispatch();
+  const { cartItems, cartSubtotal } = useSelector((state) => state.cart);
   return (
-    <Container>
-      <Row className="mt-2">
-        <Col md={8}>
-          <h1>Shopping Cart</h1>
-          <ListGroup variant="flush">
-            {images.map((img, index) => (
-              <div key={index}>
-                {/* <CartItemComponent img={img} key={index} /> */}
-              </div>
-            ))}
-
-            <Alert variant="info" className="m-3">
-              Your cart is empty
-            </Alert>
-          </ListGroup>
-        </Col>
-
-        <Col md={4}>
-          <ListGroup>
-            <ListGroup.Item className="h2">
-              Subtotal (2 Products)
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              Total price: <span className="fw-bold">200.000 VND</span>
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              <Link to="/user/cart-detail">
-                <div className="d-grid">
-                  <Button variant="success">Proceed to Checkout</Button>
-                </div>
-              </Link>
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-      </Row>
-    </Container>
+    <CartPageComponent
+      reduxDispatch={dispatch}
+      addToCartRedux={addToCart}
+      cartItems={cartItems}
+      cartSubtotal={cartSubtotal}
+      removeFromCartRedux={removeFromCart}
+    />
   );
 }
 
