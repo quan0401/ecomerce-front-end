@@ -1,7 +1,9 @@
 import { Button, Form, Container, Row, Col, Alert } from "react-bootstrap";
+
 import { useEffect, useState } from "react";
 
 import { toast } from "react-toastify";
+
 import { useNavigate } from "react-router-dom";
 
 const userInfoDefault = {
@@ -10,13 +12,14 @@ const userInfoDefault = {
   phoneNumber: "",
   country: "",
   city: "",
-  zipCode: "",
+  address: "",
   oldPassword: "",
   password: "",
   repeatPassword: "",
   _id: "",
   email: "",
 };
+
 function UserProfilePageComponent({
   logoutState,
   updateProfileApi,
@@ -28,8 +31,11 @@ function UserProfilePageComponent({
   localStorage,
 }) {
   const navigate = useNavigate();
+
   const [validated, setValidated] = useState(false);
+
   const [updatedInfo, setUpdatedInfo] = useState(userInfoDefault);
+
   const [updateStatus, setUpdateStatus] = useState(null);
 
   useEffect(() => {
@@ -40,8 +46,11 @@ function UserProfilePageComponent({
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     event.stopPropagation();
+
     const form = event.currentTarget;
+
     if (
       form.checkValidity() === true &&
       updatedInfo.password === updatedInfo.repeatPassword
@@ -49,17 +58,21 @@ function UserProfilePageComponent({
       updateProfileApi(updatedInfo)
         .then((res) => {
           setUpdateStatus(true);
+
           setUpdatedInfo((prev) => ({
             ...prev,
             password: "",
             repeatPassword: "",
             oldPassword: "",
           }));
+
           const { userUpdated } = res;
+
           const newUserInfo = {
             ...userUpdated,
             doNotLogout: userInfo.doNotLogout,
           };
+
           if (newUserInfo.doNotLogout) {
             localStorage.setItem("userInfo", JSON.stringify(newUserInfo));
           } else {
@@ -68,10 +81,12 @@ function UserProfilePageComponent({
           reduxDispatch(setReduxUserState(newUserInfo));
 
           toast.success("User updated");
+
           setValidated(false);
         })
         .catch((error) => {
           toast.error(error);
+
           reduxDispatch(
             logoutState(function () {
               navigate("/login");
@@ -82,6 +97,7 @@ function UserProfilePageComponent({
 
     setValidated(true);
   };
+
   const inputHandler = (fieldName, value) => {
     setUpdatedInfo((prev) => ({ ...prev, [fieldName]: value }));
   };
@@ -169,14 +185,14 @@ function UserProfilePageComponent({
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="zipCode">
-              <Form.Label className="fw-bold">Zip Code</Form.Label>
+            <Form.Group className="mb-3" controlId="address">
+              <Form.Label className="fw-bold">Address</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Enter your zipCode"
-                name="zipCode"
-                defaultValue={updatedInfo.zipCode}
-                onChange={(e) => inputHandler("zipCode", e.target.value)}
+                placeholder="Enter your address"
+                name="address"
+                defaultValue={updatedInfo.address}
+                onChange={(e) => inputHandler("address", e.target.value)}
               />
             </Form.Group>
 

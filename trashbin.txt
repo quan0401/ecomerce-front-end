@@ -1,3 +1,7 @@
+{}
+ 
+img={img}
+ 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

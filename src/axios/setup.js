@@ -28,7 +28,7 @@ instance.interceptors.response.use(
     // return Promise.reject(error);
     const status = error.response.status;
 
-    if (error.response.status) store.dispatch(logoutState());
+    if (status === 401) store.dispatch(logoutState());
     return Promise.reject(error.response.data);
   }
 );

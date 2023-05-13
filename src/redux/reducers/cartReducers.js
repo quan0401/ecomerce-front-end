@@ -20,6 +20,8 @@ export const cartReducer = (state = CART_INIT_STATE, action) => {
       );
 
       if (!productAlreadyExistsInState) {
+        delete payload.changeQuantiy;
+
         newState.cartItems.push(payload);
 
         newState.itemsCount += +payload.quantity;
@@ -34,11 +36,13 @@ export const cartReducer = (state = CART_INIT_STATE, action) => {
       } else {
         // Change the quantiy and re-calculate
         productAlreadyExistsInState.quantity = +payload.quantity;
+
         newState.itemsCount = 0;
 
         newState.cartSubtotal = newState.cartItems.reduce(
           (acc, currentValue) => {
             newState.itemsCount += currentValue.quantity;
+
             return acc + currentValue.quantity * currentValue.price;
           },
           0
@@ -49,6 +53,7 @@ export const cartReducer = (state = CART_INIT_STATE, action) => {
     }
     case actionTypes.REMOVE_FROM_CART: {
       const { productId, quantity, price } = action.payload;
+
       return {
         ...state,
         cartItems: state.cartItems.filter(

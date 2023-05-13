@@ -13,3 +13,6 @@ export const getOrderById = async (id) => {
 export const maskOrderAsDelivered = async (id) => {
   return await instance.put("/api/orders/delivered/" + id);
 };
+
+export const createOrderApi = async (orderData) =>
+  await instance.post("/api/orders", { ...orderData });

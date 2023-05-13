@@ -1,112 +1,52 @@
-import {
-  Container,
-  Col,
-  Row,
-  Form,
-  Alert,
-  Image,
-  Button,
-  ListGroup,
-} from "react-bootstrap";
-import CartItemComponent from "../../components/CartItemComponent";
+import UserCartDetailPageComponent from "./components/UserCartDetailPageComponent";
 
-const images = [
-  "/images/img1.jpeg",
-  "/images/img2.JPG",
-  "/images/img3.jpeg",
-  "/images/img4.jpeg",
-  "/images/img6.jpg",
-  "/images/img7.png",
-];
+import { useSelector, useDispatch } from "react-redux";
 
+import { addToCart, removeFromCart } from "../../redux/actions/cartActions";
+
+import { getProfileApi } from "../../service/userService";
+
+import { useEffect, useState } from "react";
+
+import { toast } from "react-toastify";
+
+import { createOrderApi } from "../../service/orderService";
 function UserCartDetailPage() {
+  const dispatch = useDispatch();
+
+  const { cartItems, cartSubtotal, itemsCount } = useSelector(
+    (state) => state.cart
+  );
+
+  const { userInfo } = useSelector((state) => state.userRegisterLogin);
+
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    getProfileApi(userInfo._id)
+      .then((res) => {
+        setUser((prev) => {
+          return { ...prev, ...res };
+        });
+      })
+      .catch((error) => toast.error(error));
+  }, []);
+
   return (
-    <Container>
-      <Row className="mt-3">
-        <Col md={8}>
-          <h1 className="mb-4">Cart Details</h1>
-          <Row className="mb-5">
-            <Col md={6}>
-              <h2>Shipping</h2>
-              <div>
-                <b>Name: </b>
-                John Doe
-              </div>
-              <div>
-                <b>Address: </b>
-                HCM
-              </div>
-              <div>
-                <b>Phone: </b>
-                0912343248
-              </div>
-              <Alert variant="danger">
-                Not delivered. In order to make order, fill out your profile
-                with correct address, city etc.
-              </Alert>
-            </Col>
-            <Col md={6}>
-              <h2>Payment method</h2>
-              <Form.Select>
-                <option value="4">Momo</option>
-                <option value="2">Paypal</option>
-                <option value="1">
-                  Cash on delivery (delivery may be delayed)
-                </option>
-                <option value="3">3</option>
-              </Form.Select>
-              <Alert variant="info">Not paid yet</Alert>
-            </Col>
-          </Row>
-
-          {/* Order items */}
-          <h2>Order items</h2>
-          <ListGroup variant="flush">
-            {images.map((img, index) => (
-              <CartItemComponent
-                key={index}
-                item={{
-                  image: { path: "/images/tablets-category.png" },
-                  name: "Product name",
-                  price: 10,
-                  count: 10,
-                  quantity: 10,
-                }}
-                img={img}
-              />
-            ))}
-          </ListGroup>
-        </Col>
-        <Col md={4}>
-          <ListGroup>
-            <ListGroup.Item className="fs-2">Order summary</ListGroup.Item>
-
-            <ListGroup.Item>
-              Price (after tax): <b>200.000 VND</b>
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              Shipping <b>Included</b>
-            </ListGroup.Item>
-
-            <ListGroup.Item>
-              Tax: <b>Included</b>
-            </ListGroup.Item>
-
-            <ListGroup.Item className="text-danger">
-              Total price:
-              <b> 200.000 VND</b>
-            </ListGroup.Item>
-
-            <ListGroup.Item className="d-grid">
-              <Button variant="danger">
-                Wait for your order. You pay on delivery
-              </Button>
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-      </Row>
-    </Container>
+    <>
+      {user && (
+        <UserCartDetailPageComponent
+          cartItems={cartItems}
+          cartSubtotal={cartSubtotal}
+          reduxDispatch={dispatch}
+          addToCart={addToCart}
+          removeFromCartRedux={removeFromCart}
+          userInfo={user}
+          itemsCount={itemsCount}
+          createOrderApi={createOrderApi}
+        />
+      )}
+    </>
   );
 }
 

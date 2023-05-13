@@ -19,8 +19,8 @@ function CartPageComponent({
   cartSubtotal,
   removeFromCartRedux,
 }) {
-  const changeProductQuantity = true;
   const changeCount = (productId, quantity) => {
+    const changeProductQuantity = true;
     reduxDispatch(addToCartRedux(productId, quantity, changeProductQuantity));
   };
 

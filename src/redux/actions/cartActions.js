@@ -12,7 +12,7 @@ export const addToCart =
       payload: {
         productId: _id,
         name,
-        images: images[0] ? images[0] : null,
+        image: images[0] ? images[0] : null,
         price,
         count,
         quantity,
