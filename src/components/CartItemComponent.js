@@ -14,7 +14,7 @@ function CartItemComponent({
   return (
     <ListGroup.Item className="py-4">
       <div className="d-md-flex justify-content-around align-items-center">
-        <Row>
+        <Row className="align-items-center">
           <Col md={3}>
             <div>
               <Image
@@ -39,16 +39,16 @@ function CartItemComponent({
               onChange={
                 changeCount
                   ? (e) => {
-                      changeCount(item.productId, e.target.value);
+                      changeCount(item?.productId, e.target.value);
                     }
                   : undefined
               }
               disabled={disabled}
               className="mt-3"
               aria-label="Default select example"
-              defaultValue={item.quantity}
+              defaultValue={item?.quantity}
             >
-              {Array.from({ length: item.count }).map((item, index) => (
+              {Array.from({ length: item?.count }).map((item, index) => (
                 <option key={index} value={index + 1}>
                   {index + 1}
                 </option>

@@ -8,9 +8,13 @@ import {
   CloseButton,
   Image,
 } from "react-bootstrap";
+
 import { Link, useParams } from "react-router-dom";
+
 import { getCategories } from "../../service/categoryService";
+
 import { useEffect, useState } from "react";
+
 import { getProductById } from "../../service/productService";
 
 const categories = [
@@ -43,7 +47,9 @@ const categories = [
 
 function AdminEditProductPage() {
   const [categories, setCategories] = useState([]);
+
   const [product, setProduct] = useState({});
+
   const { id: productId } = useParams();
 
   useEffect(() => {
@@ -54,6 +60,7 @@ function AdminEditProductPage() {
 
   useEffect(() => {
     const abortController = new AbortController();
+
     getCategories(abortController).then((res) => {});
 
     return () => abortController.abort();
@@ -64,6 +71,7 @@ function AdminEditProductPage() {
       <Row className="justify-content-center mt-3">
         <Col md={6}>
           <h1>Edit product</h1>
+
           <Button
             as={Link}
             to="/admin/products"
@@ -72,14 +80,17 @@ function AdminEditProductPage() {
           >
             Go back
           </Button>
+
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
+
               <Form.Control placeholder={product.name} required type="text" />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
+
               <Form.Control
                 placeholder={product.description}
                 required
@@ -90,16 +101,19 @@ function AdminEditProductPage() {
 
             <Form.Group className="mb-3">
               <Form.Label>Count in stock</Form.Label>
+
               <Form.Control placeholder={product.count} required type="text" />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Price</Form.Label>
+
               <Form.Control placeholder={product.price} required type="text" />
             </Form.Group>
 
             <Form.Group className="my-3">
               <Form.Label>Email address</Form.Label>
+
               <Form.Control required type="text" />
             </Form.Group>
 
@@ -107,12 +121,14 @@ function AdminEditProductPage() {
               <Form.Label>
                 Or create new category (e.g. Computers/Laptops/Intel)
               </Form.Label>
+
               <Form.Control required type="text" />
             </Form.Group>
 
             <Row>
               <Col className="mb-3" md={6}>
                 <Form.Label>Choose attribute</Form.Label>
+
                 <Form.Select aria-label="Default select example">
                   {categories.map((cate, index) => (
                     <option key={index} value={index}>
@@ -124,6 +140,7 @@ function AdminEditProductPage() {
 
               <Col className="mb-3" md={6}>
                 <Form.Label>Attribute value</Form.Label>
+
                 <Form.Select aria-label="Default select example">
                   {categories.map((cate, index) => (
                     <option key={index} value={index}>
@@ -138,16 +155,21 @@ function AdminEditProductPage() {
               <thead>
                 <tr>
                   <th>Attribute</th>
+
                   <th>Value</th>
+
                   <th>Delete</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr>
                   <td>Genre</td>
+
                   <td>movie</td>
+
                   <td>
-                    <CloseButton />
+                    <CloseButton className="text-danger" />
                   </td>
                 </tr>
               </tbody>
@@ -157,6 +179,7 @@ function AdminEditProductPage() {
               <Col className="mb-3" md={6}>
                 <Form.Group>
                   <Form.Label>New attribute name</Form.Label>
+
                   <Form.Control required type="text" />
                 </Form.Group>
               </Col>
@@ -164,6 +187,7 @@ function AdminEditProductPage() {
               <Col className="mb-3" md={6}>
                 <Form.Group>
                   <Form.Label>Attribute value</Form.Label>
+
                   <Form.Control required type="text" />
                 </Form.Group>
               </Col>
@@ -171,6 +195,7 @@ function AdminEditProductPage() {
 
             <Form.Group className="mb-3">
               <Form.Label>Images</Form.Label>
+
               <Row>
                 <Col style={{ position: "relative" }} md={3}>
                   <Image
@@ -178,6 +203,7 @@ function AdminEditProductPage() {
                     fluid
                     src="/images/img1.jpeg"
                   />
+
                   <i
                     className="bi bi-x-circle-fill position-absolute text-danger"
                     style={{
@@ -188,12 +214,14 @@ function AdminEditProductPage() {
                     }}
                   ></i>
                 </Col>
+
                 <Col style={{ position: "relative" }} md={3}>
                   <Image
                     crossOrigin="anonymous"
                     fluid
                     src="/images/img1.jpeg"
                   />
+
                   <i
                     className="bi bi-x-circle-fill position-absolute text-danger"
                     style={{
@@ -205,6 +233,7 @@ function AdminEditProductPage() {
                   ></i>
                 </Col>
               </Row>
+
               <Form.Control required type="file" />
             </Form.Group>
 

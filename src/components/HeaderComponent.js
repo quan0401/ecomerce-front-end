@@ -10,10 +10,16 @@ import {
   InputGroup,
   Button,
 } from "react-bootstrap";
+
 import { NavLink, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
+
 import { logoutState } from "../redux/actions/userActions";
+
+import { useEffect } from "react";
+
+import { getCategoriesAction } from "../redux/actions/categoryActions";
 
 function HeaderComponent() {
   const navigate = useNavigate();
@@ -28,22 +34,33 @@ function HeaderComponent() {
 
   const { itemsCount } = useSelector((state) => state.cart);
 
+  const { categories } = useSelector((state) => state.category);
+
+  // Good practive to put it in the dependency
+  useEffect(() => {
+    dispatch(getCategoriesAction());
+  }, [dispatch]);
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand as={NavLink} to="/home">
           Online-Shop
         </Navbar.Brand>
+
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto my-2 my-lg-0">
             <InputGroup>
               <DropdownButton id="dropdown-basic-button" title="All">
-                <Dropdown.Item>Cars</Dropdown.Item>
-                <Dropdown.Item>Electronics</Dropdown.Item>
-                <Dropdown.Item>Something else</Dropdown.Item>
+                {categories.map((category, index) => (
+                  <Dropdown.Item key={index}>{category.name}</Dropdown.Item>
+                ))}
               </DropdownButton>
+
               <Form.Control type="text" placeholder="Normal text" />
+
               <Button variant="warning">
                 <i className="bi bi-search"></i>
               </Button>
@@ -59,6 +76,7 @@ function HeaderComponent() {
                     <span className="visually-hidden">New alerts</span>
                   </span>
                 </Nav.Link>
+
                 <NavDropdown
                   title={userInfo.firstName + " " + userInfo.lastName}
                   id="collasible-nav-dropdown"
@@ -78,9 +96,12 @@ function HeaderComponent() {
                   <Badge pill bg="danger">
                     {itemsCount !== 0 && itemsCount}
                   </Badge>
+
                   <i className="bi bi-cart"></i>
+
                   <span className="ms-1">Cart</span>
                 </Nav.Link>
+
                 <NavDropdown
                   title={userInfo.firstName + " " + userInfo.lastName}
                   id="collasible-nav-dropdown"
@@ -92,9 +113,11 @@ function HeaderComponent() {
                   >
                     My orders
                   </NavDropdown.Item>
+
                   <NavDropdown.Item as={NavLink} to="/user/">
                     Profile
                   </NavDropdown.Item>
+
                   <NavDropdown.Item
                     onClick={() => {
                       dispatch(logoutState(callbackLogout));
@@ -116,6 +139,7 @@ function HeaderComponent() {
               </>
             )}
           </Nav>
+
           {/* </Nav> */}
         </Navbar.Collapse>
       </Container>

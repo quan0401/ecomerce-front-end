@@ -11,7 +11,7 @@ import {
 import CartItemComponent from "../../../components/CartItemComponent";
 
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+
 import { useNavigate } from "react-router-dom";
 
 function UserCartDetailPageComponent({
@@ -34,6 +34,7 @@ function UserCartDetailPageComponent({
 
   useEffect(() => {
     const { city, country, address, phoneNumber, email } = userInfo;
+
     if (city && country && address && phoneNumber && email)
       setDisableButton(false);
     else {
@@ -70,11 +71,13 @@ function UserCartDetailPageComponent({
       })),
       paymentMethod,
     };
+
     createOrderApi(orderData)
       .then((res) => {
         const {
           order: { _id },
         } = res;
+
         navigate(`/user/order-detail/${_id}`);
       })
       .catch((err) => {
@@ -88,7 +91,7 @@ function UserCartDetailPageComponent({
         <Col md={8}>
           <h1 className="mb-4">Cart Details</h1>
 
-          <Row className="mb-5">
+          <Row>
             <Col md={6}>
               <h2>Shipping</h2>
 
@@ -104,10 +107,9 @@ function UserCartDetailPageComponent({
 
               <div>
                 <b>Phone: </b>
+
                 {userInfo?.phoneNumber}
               </div>
-
-              <Alert variant="danger">Not delivered. {missingInfo}</Alert>
             </Col>
 
             <Col md={6}>
@@ -125,8 +127,16 @@ function UserCartDetailPageComponent({
                   Cash on delivery (delivery may be delayed)
                 </option>
               </Form.Select>
+            </Col>
+          </Row>
 
-              <Alert variant="info">Not paid yet</Alert>
+          <Row className="mt-3">
+            <Col md={6}>
+              <Alert variant="danger">Not delivered. {missingInfo}</Alert>
+            </Col>
+
+            <Col md={6}>
+              <Alert variant="info">Not paid yet.</Alert>
             </Col>
           </Row>
 
@@ -170,9 +180,9 @@ function UserCartDetailPageComponent({
               <Button
                 onClick={orderHandler}
                 disabled={disableButton}
-                variant="danger"
+                variant="success"
               >
-                Pay for the order
+                Place order
               </Button>
             </ListGroup.Item>
           </ListGroup>

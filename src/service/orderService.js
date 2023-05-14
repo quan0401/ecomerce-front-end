@@ -16,3 +16,5 @@ export const maskOrderAsDelivered = async (id) => {
 
 export const createOrderApi = async (orderData) =>
   await instance.post("/api/orders", { ...orderData });
+
+export const getOrdersUserApi = async () => await instance.get("/api/orders");

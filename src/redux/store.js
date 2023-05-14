@@ -3,6 +3,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import { cartReducer } from "./reducers/cartReducers";
 import { userRegisterLoginReducer } from "./reducers/userReducers";
+import categoryReducer from "./reducers/categoryReducers";
 
 const userInfoLocalStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
@@ -13,6 +14,7 @@ const userInfoLocalStorage = localStorage.getItem("userInfo")
 const reducer = combineReducers({
   cart: cartReducer,
   userRegisterLogin: userRegisterLoginReducer,
+  category: categoryReducer,
 });
 
 const initialValue = {
