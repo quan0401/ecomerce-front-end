@@ -1,6 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 
-import { getProductById, updateProductApi } from "../../service/productService";
+import {
+  getProductById,
+  updateProductApi,
+  deleteProductImage,
+} from "../../service/productService";
 
 import { useParams } from "react-router-dom";
 
@@ -12,6 +16,8 @@ import { useEffect, useState } from "react";
 
 function AdminEditProductPage() {
   const dispatch = useDispatch();
+
+  const [deleteImage, setDeleteImage] = useState(false);
 
   const { id: productId } = useParams();
 
@@ -25,7 +31,12 @@ function AdminEditProductPage() {
       .catch((err) => {
         console.log(err);
       });
-  }, [productId]);
+  }, [productId, deleteImage]);
+
+  const deleteImageHandler = async (imagePath, productId) => {
+    const result = await deleteProductImage(productId, imagePath);
+    setDeleteImage((prev) => !prev);
+  };
 
   const { categories } = useSelector((state) => state.category);
 
@@ -39,6 +50,7 @@ function AdminEditProductPage() {
           updateProductApi={updateProductApi}
           reduxDispatch={dispatch}
           createNewAttrForCate={createNewAttrForCate}
+          deleteProductImageHandler={deleteImageHandler}
         />
       )}
     </>

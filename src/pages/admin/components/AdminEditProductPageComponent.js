@@ -12,12 +12,15 @@ import {
 
 import { Link } from "react-router-dom";
 
+import { uploadImageApi } from "../../../service/productService";
+
 function AdminEditProductPageComponent({
   categories,
   product,
   updateProductApi,
   reduxDispatch,
   createNewAttrForCate,
+  deleteProductImageHandler,
 }) {
   let { attributes: productAttributes, category: productCategory } = product;
 
@@ -296,21 +299,38 @@ function AdminEditProductPageComponent({
                       fluid
                       src={"/images/img1.jpeg" || img.url}
                     />
-
-                    <i
-                      className="bi bi-x-circle-fill position-absolute text-danger"
-                      style={{
-                        top: -10,
-                        left: "4px",
-                        zIndex: "1",
-                        cursor: "pointer",
+                    <Button
+                      onClick={() => {
+                        deleteProductImageHandler(img.url, product._id);
                       }}
-                    ></i>
+                      variant="light"
+                      style={{
+                        position: "absolute",
+                        top: -18,
+                        left: -5,
+                        backgroundColor: "transparent",
+                        border: "none",
+                      }}
+                    >
+                      <i className="bi bi-x-circle-fill text-danger"></i>
+                    </Button>
                   </Col>
                 ))}
               </Row>
 
-              <Form.Control required type="file" />
+              <Form.Control
+                onChange={(e) => {
+                  e.preventDefault();
+                  uploadImageApi(e.target.files, product._id)
+                    .then((res) => {
+                      console.log(res);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                }}
+                type="file"
+              />
             </Form.Group>
 
             <div className="d-grid d-md-block mb-3">
