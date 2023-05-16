@@ -12,6 +12,8 @@ import AdminEditProductPageComponent from "./components/AdminEditProductPageComp
 
 import { createNewAttrForCate } from "../../redux/actions/categoryActions";
 
+import { uploadImageApi } from "../../service/productService";
+
 import { useEffect, useState } from "react";
 
 function AdminEditProductPage() {
@@ -51,6 +53,7 @@ function AdminEditProductPage() {
           reduxDispatch={dispatch}
           createNewAttrForCate={createNewAttrForCate}
           deleteProductImageHandler={deleteImageHandler}
+          uploadImageApi={uploadImageApi}
         />
       )}
     </>

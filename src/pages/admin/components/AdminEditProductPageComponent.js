@@ -12,7 +12,7 @@ import {
 
 import { Link } from "react-router-dom";
 
-import { uploadImageApi } from "../../../service/productService";
+import { toast } from "react-toastify";
 
 function AdminEditProductPageComponent({
   categories,
@@ -21,7 +21,10 @@ function AdminEditProductPageComponent({
   reduxDispatch,
   createNewAttrForCate,
   deleteProductImageHandler,
+  uploadImageApi,
 }) {
+  const [validated, setValidated] = useState(false);
+
   let { attributes: productAttributes, category: productCategory } = product;
 
   const [productAttributesTable, setProductAttributesTable] = useState([
@@ -70,6 +73,7 @@ function AdminEditProductPageComponent({
   }
 
   const addAttributeToTable = (value, key = "") => {
+    if (value === "choose_attribute_value") return;
     const actualKey = key || selectedAttributeKey;
 
     setProductAttributesTable((prev) => {
@@ -116,6 +120,55 @@ function AdminEditProductPageComponent({
     }
   };
 
+  const [productUpdateStatus, setProductUpdateStatus] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const {
+      name: { value: nameValue },
+      description: { value: descriptionValue },
+      count: { value: countValue },
+      price: { value: priceValue },
+      category: { value: categoryValue },
+    } = e.currentTarget.elements;
+
+    if (e.currentTarget.checkValidity()) {
+      updateProductApi(product._id, {
+        name: nameValue,
+        description: descriptionValue,
+        count: countValue,
+        price: priceValue,
+        category: categoryValue,
+        attributesTable: productAttributesTable,
+      })
+        .then((res) => {
+          toast.success(res.EM);
+          setProductUpdateStatus(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          setProductUpdateStatus(false);
+        });
+    }
+  };
+
+  const handleImageUpload = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const files = e.target.files;
+    if (files.length > 0) {
+      uploadImageApi(files, product._id)
+        .then((res) => {
+          toast.success(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <Container>
       <Row className="justify-content-center mt-3">
@@ -131,18 +184,24 @@ function AdminEditProductPageComponent({
             Go back
           </Button>
 
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
+              <Form.Label className="text-secondary">Name</Form.Label>
 
-              <Form.Control placeholder={product.name} required type="text" />
+              <Form.Control
+                defaultValue={product.name}
+                name="name"
+                required
+                type="text"
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
+              <Form.Label className="text-secondary">Description</Form.Label>
 
               <Form.Control
-                placeholder={product.description}
+                defaultValue={product.description}
+                name="description"
                 required
                 as="textarea"
                 rows={3}
@@ -150,27 +209,37 @@ function AdminEditProductPageComponent({
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Count in stock</Form.Label>
+              <Form.Label className="text-secondary">Count in stock</Form.Label>
 
-              <Form.Control placeholder={product.count} required type="text" />
+              <Form.Control
+                defaultValue={product.count}
+                name="count"
+                required
+                type="text"
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Price</Form.Label>
+              <Form.Label className="text-secondary">Price $</Form.Label>
 
               <Form.Control
-                placeholder={`$${product.price}`}
+                defaultValue={product.price}
+                name="price"
                 required
                 type="text"
               />
             </Form.Group>
 
             <Form.Group className="my-3">
-              <Form.Label>Choose category</Form.Label>
+              <Form.Label className="text-secondary">
+                Choose category
+              </Form.Label>
 
               <Form.Select
+                required
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 defaultValue={product.category}
+                name="category"
               >
                 {categories.map((cate, index) => {
                   return (
@@ -184,7 +253,9 @@ function AdminEditProductPageComponent({
 
             <Row>
               <Col className="mb-3" md={6}>
-                <Form.Label>Choose attribute</Form.Label>
+                <Form.Label className="text-secondary">
+                  Choose attribute
+                </Form.Label>
 
                 <Form.Select
                   defaultValue={attributesOfEditedProduct[0]}
@@ -199,12 +270,17 @@ function AdminEditProductPageComponent({
               </Col>
 
               <Col className="mb-3" md={6}>
-                <Form.Label>Attribute value</Form.Label>
+                <Form.Label className="text-secondary">
+                  Attribute value
+                </Form.Label>
 
                 <Form.Select
                   onChange={(e) => addAttributeToTable(e.target.value)}
-                  defaultValue={attributesValues[0]}
+                  defaultValue={"choose_attribute_value"}
                 >
+                  <option value="choose_attribute_value">
+                    Choose attribute value
+                  </option>
                   {attributesValues.map((item, index) => (
                     <option key={index} value={item}>
                       {item}
@@ -250,22 +326,25 @@ function AdminEditProductPageComponent({
                 </tbody>
               </Table>
             )}
-            <Form.Group className="mb-3">
-              <Form.Label>
+
+            {/* <Form.Group className="mb-3">
+              <Form.Label className="text-secondary">
                 Or create new category (e.g. Computers/Laptops/Intel)
               </Form.Label>
 
-              <Form.Control required type="text" />
-            </Form.Group>
+              <Form.Control type="text" />
+            </Form.Group> */}
 
             <Row>
               <Col md={6}>
                 <Form.Group
                   onChange={(e) => setNewAttributeKey(e.target.value)}
                 >
-                  <Form.Label>New attribute name</Form.Label>
+                  <Form.Label className="text-secondary">
+                    New attribute name
+                  </Form.Label>
 
-                  <Form.Control required type="text" />
+                  <Form.Control type="text" />
                 </Form.Group>
               </Col>
 
@@ -273,9 +352,11 @@ function AdminEditProductPageComponent({
                 <Form.Group
                   onChange={(e) => setNewAttributeValue(e.target.value)}
                 >
-                  <Form.Label>Attribute value</Form.Label>
+                  <Form.Label className="text-secondary">
+                    Attribute value
+                  </Form.Label>
 
-                  <Form.Control required type="text" />
+                  <Form.Control type="text" />
                 </Form.Group>
               </Col>
             </Row>
@@ -289,16 +370,12 @@ function AdminEditProductPageComponent({
             </Row>
 
             <Form.Group className="mb-3">
-              <Form.Label>Images</Form.Label>
+              <Form.Label className="text-secondary">Images</Form.Label>
 
               <Row>
                 {product.images.map((img, index) => (
                   <Col key={index} style={{ position: "relative" }} md={3}>
-                    <Image
-                      crossOrigin="anonymous"
-                      fluid
-                      src={"/images/img1.jpeg" || img.url}
-                    />
+                    <Image crossOrigin="anonymous" fluid src={img.url} />
                     <Button
                       onClick={() => {
                         deleteProductImageHandler(img.url, product._id);
@@ -318,23 +395,11 @@ function AdminEditProductPageComponent({
                 ))}
               </Row>
 
-              <Form.Control
-                onChange={(e) => {
-                  e.preventDefault();
-                  uploadImageApi(e.target.files, product._id)
-                    .then((res) => {
-                      console.log(res);
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                }}
-                type="file"
-              />
+              <Form.Control onChange={handleImageUpload} type="file" />
             </Form.Group>
 
             <div className="d-grid d-md-block mb-3">
-              <Button>Save changes</Button>{" "}
+              <Button type="submit">Save changes</Button>{" "}
             </div>
           </Form>
         </Col>

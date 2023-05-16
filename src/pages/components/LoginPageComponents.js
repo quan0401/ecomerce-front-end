@@ -12,10 +12,14 @@ import { useEffect, useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
+function LoginPageComponent({
+  setReduxUserState,
+  loginUser,
+  reduxDispatch,
+  userInfo,
+}) {
   const navigate = useNavigate();
 
   const [validated, setValidated] = useState(false);
@@ -25,10 +29,8 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
     userLoggedIn: {},
   });
 
-  const { userInfo } = useSelector((state) => state.userRegisterLogin);
-
   useEffect(() => {
-    if (JSON.stringify(userInfo) !== "{}") navigate("/home", { replace: true });
+    if (JSON.stringify(userInfo) !== "{}") navigate(-1, { replace: true });
   }, []);
 
   const handleSubmit = (event) => {
@@ -70,6 +72,7 @@ function LoginPageComponent({ setReduxUserState, loginUser, reduxDispatch }) {
         })
         .catch((error) => {
           toast.error(error.EM);
+
           setLoginStatus((prev) => ({ ...prev, loading: false }));
         });
     }

@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 
 import { useSelector } from "react-redux";
 
-function RegisterPageComponent({ registerUser }) {
+function RegisterPageComponent({ registerUser, userInfo }) {
   const navigate = useNavigate();
 
   const [validated, setValidated] = useState(false);
@@ -39,10 +39,8 @@ function RegisterPageComponent({ registerUser }) {
     }
   };
 
-  const { userInfo } = useSelector((state) => state.userRegisterLogin.userInfo);
-
   useEffect(() => {
-    if (JSON.stringify(userInfo) !== "{}") navigate("/home", { replace: true });
+    if (JSON.stringify(userInfo) !== "{}") navigate(-1, { replace: true });
   }, []);
 
   const handleSubmit = (e) => {
