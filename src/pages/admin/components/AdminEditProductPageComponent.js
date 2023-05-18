@@ -153,19 +153,12 @@ function AdminEditProductPageComponent({
     }
   };
 
-  const handleImageUpload = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const [imageUploadStatus, setImageUploadStatus] = useState(false);
 
+  const handleImageUpload = async (e) => {
     const files = e.target.files;
     if (files.length > 0) {
-      uploadImageApi(files, product._id)
-        .then((res) => {
-          toast.success(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      await uploadImageApi(files, product._id);
     }
   };
 
@@ -327,14 +320,6 @@ function AdminEditProductPageComponent({
               </Table>
             )}
 
-            {/* <Form.Group className="mb-3">
-              <Form.Label className="text-secondary">
-                Or create new category (e.g. Computers/Laptops/Intel)
-              </Form.Label>
-
-              <Form.Control type="text" />
-            </Form.Group> */}
-
             <Row>
               <Col md={6}>
                 <Form.Group
@@ -395,7 +380,7 @@ function AdminEditProductPageComponent({
                 ))}
               </Row>
 
-              <Form.Control onChange={handleImageUpload} type="file" />
+              <Form.Control multiple onChange={handleImageUpload} type="file" />
             </Form.Group>
 
             <div className="d-grid d-md-block mb-3">
