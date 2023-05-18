@@ -1,6 +1,6 @@
 import { Button, Form, Container, Row, Col, Table } from "react-bootstrap";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
@@ -12,6 +12,8 @@ function AdminCreateProductPageComponent({
   reduxDispatch,
   createProductApi,
 }) {
+  const navigate = useNavigate();
+
   // use for display to the frontend
   const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -67,7 +69,7 @@ function AdminCreateProductPageComponent({
 
   const [validated, setValidated] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -79,7 +81,8 @@ function AdminCreateProductPageComponent({
     } = e.currentTarget.elements;
 
     if (e.currentTarget.checkValidity()) {
-      createProductApi({
+      let createdProductId = null;
+      await createProductApi({
         name: nameValue,
         price: priceValue,
         description: descriptionValue,
@@ -89,17 +92,21 @@ function AdminCreateProductPageComponent({
       })
         .then((res) => {
           const {
-            newProduct: { _id: productId },
+            newProduct: { _id },
           } = res;
 
-          if (images) {
-            uploadImageApi(images, productId);
-          }
+          createdProductId = _id;
+
           toast.success(res.EM);
         })
         .catch((err) => {
           console.log(err);
         });
+      if (images && createdProductId) {
+        await uploadImageApi(images, createdProductId);
+      }
+      console.log(createdProductId);
+      navigate("/admin/edit-product/" + createdProductId, { replace: true });
       setValidated(true);
     }
     setValidated(true);
@@ -211,13 +218,6 @@ function AdminCreateProductPageComponent({
               </Col>
             </Row>
 
-            <Form.Group className="mb-3">
-              <Form.Label className="text-secondary">
-                Or create new category (e.g. Computers/Laptops/Intel)
-              </Form.Label>
-              <Form.Control type="text" />
-            </Form.Group>
-
             <Table striped>
               <thead>
                 <tr>
@@ -248,7 +248,12 @@ function AdminCreateProductPageComponent({
                   ))}
               </tbody>
             </Table>
-
+            <Form.Group className="mb-3">
+              <Form.Label className="text-secondary">
+                Or create new category (e.g. Computers/Laptops/Intel)
+              </Form.Label>
+              <Form.Control type="text" />
+            </Form.Group>
             <Row>
               <Col className="mb-3" md={6}>
                 <Form.Group>

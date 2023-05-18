@@ -22,6 +22,7 @@ function AdminEditProductPageComponent({
   createNewAttrForCate,
   deleteProductImageHandler,
   uploadImageApi,
+  setReloadProduct,
 }) {
   const [validated, setValidated] = useState(false);
 
@@ -152,13 +153,15 @@ function AdminEditProductPageComponent({
         });
     }
   };
-
-  const [imageUploadStatus, setImageUploadStatus] = useState(false);
+  const [imageUploadMessage, setImageUploadMessage] = useState("");
 
   const handleImageUpload = async (e) => {
+    setImageUploadMessage("Uploading...");
     const files = e.target.files;
     if (files.length > 0) {
       await uploadImageApi(files, product._id);
+      setReloadProduct((prev) => !prev);
+      setImageUploadMessage("");
     }
   };
 
@@ -382,6 +385,7 @@ function AdminEditProductPageComponent({
 
               <Form.Control multiple onChange={handleImageUpload} type="file" />
             </Form.Group>
+            {imageUploadMessage && <div>{imageUploadMessage}</div>}
 
             <div className="d-grid d-md-block mb-3">
               <Button type="submit">Save changes</Button>{" "}

@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 function AdminEditProductPage() {
   const dispatch = useDispatch();
 
+  const [reloadProduct, setReloadProduct] = useState(false);
+
   const [deleteImage, setDeleteImage] = useState(false);
 
   const { id: productId } = useParams();
@@ -33,7 +35,7 @@ function AdminEditProductPage() {
       .catch((err) => {
         console.log(err);
       });
-  }, [productId, deleteImage]);
+  }, [productId, deleteImage, reloadProduct]);
 
   const deleteImageHandler = async (imagePath, productId) => {
     const result = await deleteProductImage(productId, imagePath);
@@ -54,6 +56,7 @@ function AdminEditProductPage() {
           createNewAttrForCate={createNewAttrForCate}
           deleteProductImageHandler={deleteImageHandler}
           uploadImageApi={uploadImageApi}
+          setReloadProduct={setReloadProduct}
         />
       )}
     </>

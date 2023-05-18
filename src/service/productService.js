@@ -57,7 +57,9 @@ export const uploadImageApi = async (images, productId) => {
 
       formData.append("upload_preset", "gvrttlre");
 
-      fetch(url, {
+      let uploadedProductData;
+
+      await fetch(url, {
         method: "POST",
         body: formData,
       })
@@ -65,14 +67,16 @@ export const uploadImageApi = async (images, productId) => {
           return response.json();
         })
         .then((data) => {
-          instance.post(
-            "/api/products/admin/upload?cloudinary=true&productId=" + productId,
-            { imageUrl: data.url }
-          );
+          uploadedProductData = data;
         })
-        .then((res) => {
-          console.log(res);
+        .catch((error) => {
+          console.log(error);
         });
+
+      await instance.post(
+        "/api/products/admin/upload?cloudinary=true&productId=" + productId,
+        { imageUrl: uploadedProductData.url }
+      );
     }
   }
 };

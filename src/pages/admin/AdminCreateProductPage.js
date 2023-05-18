@@ -6,11 +6,7 @@ import { createNewAttrForCate } from "../../redux/actions/categoryActions";
 
 import instance from "../../axios/setup";
 
-import {
-  uploadImageApi,
-  createProductApi,
-  uploadImageToCloudinary,
-} from "../../service/productService";
+import { uploadImageApi, createProductApi } from "../../service/productService";
 
 function AdminCreateProductPage() {
   const dispatch = useDispatch();
