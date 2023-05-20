@@ -28,3 +28,9 @@ export const updateProfileApi = async (updatedInfo) => {
   const result = await instance.put("/api/users/profile", { ...updatedInfo });
   return result;
 };
+
+export const updateUserForAdminApi = async (userId, userData) =>
+  await instance.put("/api/users/" + userId, { ...userData });
+
+export const getUserForAdminApi = async (userId) =>
+  await instance.get("/api/users/" + userId);
