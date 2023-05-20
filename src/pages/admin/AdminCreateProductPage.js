@@ -2,9 +2,11 @@ import AdminCreateProductPageComponent from "./components/AdminCreateProductPage
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { createNewAttrForCate } from "../../redux/actions/categoryActions";
-
-import instance from "../../axios/setup";
+import {
+  createNewAttrForCate,
+  insertCategoryAction,
+  deleteCategoryAction,
+} from "../../redux/actions/categoryActions";
 
 import { uploadImageApi, createProductApi } from "../../service/productService";
 
@@ -20,6 +22,8 @@ function AdminCreateProductPage() {
       uploadImageApi={uploadImageApi}
       reduxDispatch={dispatch}
       createProductApi={createProductApi}
+      insertCategoryAction={insertCategoryAction}
+      deleteCategoryAction={deleteCategoryAction}
     />
   );
 }

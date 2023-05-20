@@ -56,7 +56,7 @@ function AdminProducstPage() {
         <Col md={10}>
           <h1>Product</h1>
           <Link to="/admin/create-new-product">
-            <Button className="mb-3">Add product</Button>
+            <Button className="mb-3">Add new product</Button>
           </Link>
           <Table bordered striped responsive>
             <thead>

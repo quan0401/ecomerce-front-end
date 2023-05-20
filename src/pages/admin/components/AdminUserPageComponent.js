@@ -81,7 +81,7 @@ function AdminUserPageComponent() {
                     <div className="d-flex ">
                       <Button
                         as={Link}
-                        to="/admin/edit-user"
+                        to={`/admin/edit-user/${user._id}`}
                         className="mx-2"
                         size="sm"
                       >

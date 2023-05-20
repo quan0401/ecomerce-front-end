@@ -8,3 +8,9 @@ export const createNewAttrForCateApi = async (key, value, categoryChosen) =>
     value,
     categoryChosen,
   });
+
+export const createCategoryService = async (name) =>
+  await instance.post("/api/categories/", { name });
+
+export const deleteCategoryService = async (name) =>
+  await instance.delete("/api/categories/" + encodeURIComponent(name));

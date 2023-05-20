@@ -4,13 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function AdminCreateProductPageComponent({
   categories,
   uploadImageApi,
+  createNewAttrForCate,
   reduxDispatch,
   createProductApi,
+  insertCategoryAction,
+  deleteCategoryAction,
 }) {
   const navigate = useNavigate();
 
@@ -30,7 +33,8 @@ function AdminCreateProductPageComponent({
   const [images, setImages] = useState();
 
   useEffect(() => {
-    if (categories[0]?.name) setSelectedCategory(categories[0]?.name);
+    if (categories[0]?.name && !selectedCategory)
+      setSelectedCategory(categories[0]?.name);
   }, [categories]);
 
   useEffect(() => {
@@ -49,7 +53,9 @@ function AdminCreateProductPageComponent({
       if (newAttributesList[0]?.key)
         setSelectedAttributeKey(newAttributesList[0]?.key);
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, categories]);
+
+  const attributeListRef = useRef(null);
 
   useEffect(() => {
     if (selectedAttributeKey) {
@@ -62,7 +68,9 @@ function AdminCreateProductPageComponent({
         },
         []
       );
-
+      if (attributeListRef.current.value) {
+        attributeListRef.current.value = "Choose_attribute_value";
+      }
       setAttributesValues(newAttributesValuesList);
     }
   }, [selectedAttributeKey]);
@@ -71,6 +79,7 @@ function AdminCreateProductPageComponent({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     e.stopPropagation();
 
     const {
@@ -82,6 +91,7 @@ function AdminCreateProductPageComponent({
 
     if (e.currentTarget.checkValidity()) {
       let createdProductId = null;
+
       await createProductApi({
         name: nameValue,
         price: priceValue,
@@ -102,11 +112,12 @@ function AdminCreateProductPageComponent({
         .catch((err) => {
           console.log(err);
         });
+
       if (images && createdProductId) {
         await uploadImageApi(images, createdProductId);
       }
-      console.log(createdProductId);
       navigate("/admin/edit-product/" + createdProductId, { replace: true });
+
       setValidated(true);
     }
     setValidated(true);
@@ -124,6 +135,52 @@ function AdminCreateProductPageComponent({
     }
   };
 
+  const removeAttrFromTable = (key) => {
+    setAttributeTable((prev) => prev.filter((item) => item.key !== key));
+  };
+
+  const handleInsertCategory = (e) => {
+    if (e.key === "Enter") {
+      const newCat = e.target.value;
+
+      if (newCat.trim() !== "") {
+        reduxDispatch(insertCategoryAction(newCat));
+
+        e.target.value = "";
+
+        setSelectedCategory(newCat);
+      }
+    }
+  };
+
+  const handleDeleteCategory = async (e) => {
+    if (window.confirm(`Delete '${selectedCategory}' category`)) {
+      await reduxDispatch(deleteCategoryAction(selectedCategory));
+
+      setSelectedCategory(categories[0].name);
+    }
+  };
+
+  // Create new attribute
+
+  const [newAttributeKey, setNewAttributeKey] = useState("");
+
+  const [newAttributeValue, setNewAttributeValue] = useState("");
+
+  const createNewAttributeHandler = () => {
+    if (newAttributeKey.trim() !== "" && newAttributeValue.trim() !== "") {
+      handleAddToTable(newAttributeValue, newAttributeKey);
+
+      reduxDispatch(
+        createNewAttrForCate(
+          newAttributeKey,
+          newAttributeValue,
+          selectedCategory
+        )
+      );
+    }
+  };
+
   return (
     <Container>
       <Row className="justify-content-center mt-3">
@@ -137,7 +194,7 @@ function AdminCreateProductPageComponent({
           >
             Go back
           </Button>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label className="text-secondary">Name</Form.Label>
               <Form.Control name="name" required type="text" />
@@ -165,11 +222,12 @@ function AdminCreateProductPageComponent({
 
             <Form.Group className="mb-3">
               <Form.Label className="text-secondary">
-                Category X (remove selected)
+                Choose category
               </Form.Label>
               <Form.Select
                 name="category"
                 onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedCategory}
               >
                 {categories.map((cate, index) => (
                   <option key={index} value={cate.name}>
@@ -177,6 +235,15 @@ function AdminCreateProductPageComponent({
                   </option>
                 ))}
               </Form.Select>
+              <div className="mt-3 text-end">
+                <Button
+                  onClick={handleDeleteCategory}
+                  size="sm"
+                  variant="danger"
+                >
+                  Delete selected category
+                </Button>{" "}
+              </div>
             </Form.Group>
 
             <Row>
@@ -200,6 +267,7 @@ function AdminCreateProductPageComponent({
                   Attribute value
                 </Form.Label>
                 <Form.Select
+                  ref={attributeListRef}
                   onChange={(e) => {
                     if (e.target.value !== "Choose_attribute_value") {
                       handleAddToTable(e.target.value);
@@ -218,17 +286,17 @@ function AdminCreateProductPageComponent({
               </Col>
             </Row>
 
-            <Table striped>
-              <thead>
-                <tr>
-                  <th>Attribute</th>
-                  <th>Value</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {attributeTable.length > 0 &&
-                  attributeTable.map((item, index) => (
+            {attributeTable.length > 0 && (
+              <Table striped>
+                <thead>
+                  <tr>
+                    <th>Attribute</th>
+                    <th>Value</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {attributeTable.map((item, index) => (
                     <tr key={index}>
                       <td>{item.key}</td>
                       <td>{item.value}</td>
@@ -239,20 +307,21 @@ function AdminCreateProductPageComponent({
                           style={{
                             backgroundColor: "rgb(244,244,244)",
                           }}
-                          // onClick={() => removeAttrFromTable(item.key)}
+                          onClick={() => removeAttrFromTable(item.key)}
                         >
                           <i className="bi bi-trash-fill text-danger"></i>
                         </Button>
                       </td>
                     </tr>
                   ))}
-              </tbody>
-            </Table>
+                </tbody>
+              </Table>
+            )}
             <Form.Group className="mb-3">
               <Form.Label className="text-secondary">
                 Or create new category (e.g. Computers/Laptops/Intel)
               </Form.Label>
-              <Form.Control type="text" />
+              <Form.Control onKeyUp={handleInsertCategory} type="text" />
             </Form.Group>
             <Row>
               <Col className="mb-3" md={6}>
@@ -260,7 +329,10 @@ function AdminCreateProductPageComponent({
                   <Form.Label className="text-secondary">
                     New attribute name
                   </Form.Label>
-                  <Form.Control type="text" />
+                  <Form.Control
+                    onChange={(e) => setNewAttributeKey(e.target.value)}
+                    type="text"
+                  />
                 </Form.Group>
               </Col>
 
@@ -269,9 +341,24 @@ function AdminCreateProductPageComponent({
                   <Form.Label className="text-secondary">
                     Attribute value
                   </Form.Label>
-                  <Form.Control noValidate type="text" />
+                  <Form.Control
+                    onChange={(e) => setNewAttributeValue(e.target.value)}
+                    type="text"
+                  />
                 </Form.Group>
               </Col>
+            </Row>
+
+            <Row style={{ marginBottom: -30 }}>
+              <div className="text-end">
+                <Button
+                  size="sm"
+                  variant="warning"
+                  onClick={createNewAttributeHandler}
+                >
+                  Add new attribute
+                </Button>
+              </div>
             </Row>
 
             <Form.Group className="mb-3">

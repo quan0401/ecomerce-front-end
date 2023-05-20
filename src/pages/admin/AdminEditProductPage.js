@@ -10,7 +10,10 @@ import { useParams } from "react-router-dom";
 
 import AdminEditProductPageComponent from "./components/AdminEditProductPageComponent";
 
-import { createNewAttrForCate } from "../../redux/actions/categoryActions";
+import {
+  createNewAttrForCate,
+  deleteCategoryAction,
+} from "../../redux/actions/categoryActions";
 
 import { uploadImageApi } from "../../service/productService";
 
@@ -57,6 +60,7 @@ function AdminEditProductPage() {
           deleteProductImageHandler={deleteImageHandler}
           uploadImageApi={uploadImageApi}
           setReloadProduct={setReloadProduct}
+          deleteCategoryAction={deleteCategoryAction}
         />
       )}
     </>

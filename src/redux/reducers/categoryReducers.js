@@ -1,6 +1,8 @@
 import {
   GET_CATEGORIES,
   CREATE_NEW_ATTR_FOR_CATE,
+  INSERT_NEW_CATEGORY,
+  DELETE_CATEGORY,
 } from "../constans/categoryConstants";
 
 const categoryReducer = (state = { categories: [] }, action) => {
@@ -17,9 +19,22 @@ const categoryReducer = (state = { categories: [] }, action) => {
         categories: action.payload,
       };
     }
+    case INSERT_NEW_CATEGORY: {
+      return {
+        ...state,
+        categories: [...state.categories, action.payload],
+      };
+    }
+    case DELETE_CATEGORY: {
+      return {
+        ...state,
+        categories: action.payload,
+      };
+    }
     default: {
       return state;
     }
   }
 };
+
 export default categoryReducer;

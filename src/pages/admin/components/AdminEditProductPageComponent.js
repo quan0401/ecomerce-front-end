@@ -23,6 +23,7 @@ function AdminEditProductPageComponent({
   deleteProductImageHandler,
   uploadImageApi,
   setReloadProduct,
+  deleteCategoryAction,
 }) {
   const [validated, setValidated] = useState(false);
 
@@ -66,7 +67,7 @@ function AdminEditProductPageComponent({
   let attributesValues = [];
 
   if (selectedAttributeKey) {
-    attributesOfEditedProduct.forEach((item, index) => {
+    attributesOfEditedProduct.forEach((item) => {
       if (item.key === selectedAttributeKey) {
         attributesValues = [...attributesValues, ...item.value];
       }
@@ -165,6 +166,13 @@ function AdminEditProductPageComponent({
     }
   };
 
+  const handleDeleteCategory = async (e) => {
+    if (window.confirm(`Delete '${selectedCategory}' category`)) {
+      await reduxDispatch(deleteCategoryAction(selectedCategory));
+      setSelectedCategory(categories[0].name);
+    }
+  };
+
   return (
     <Container>
       <Row className="justify-content-center mt-3">
@@ -234,8 +242,8 @@ function AdminEditProductPageComponent({
               <Form.Select
                 required
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                defaultValue={product.category}
                 name="category"
+                value={selectedCategory}
               >
                 {categories.map((cate, index) => {
                   return (
@@ -245,6 +253,15 @@ function AdminEditProductPageComponent({
                   );
                 })}
               </Form.Select>
+              <div className="mt-3 text-end">
+                <Button
+                  onClick={handleDeleteCategory}
+                  size="sm"
+                  variant="danger"
+                >
+                  Delete selected category
+                </Button>{" "}
+              </div>
             </Form.Group>
 
             <Row>
@@ -325,33 +342,39 @@ function AdminEditProductPageComponent({
 
             <Row>
               <Col md={6}>
-                <Form.Group
-                  onChange={(e) => setNewAttributeKey(e.target.value)}
-                >
+                <Form.Group>
                   <Form.Label className="text-secondary">
                     New attribute name
                   </Form.Label>
 
-                  <Form.Control type="text" />
+                  <Form.Control
+                    onChange={(e) => setNewAttributeKey(e.target.value)}
+                    type="text"
+                  />
                 </Form.Group>
               </Col>
 
               <Col md={6}>
-                <Form.Group
-                  onChange={(e) => setNewAttributeValue(e.target.value)}
-                >
+                <Form.Group>
                   <Form.Label className="text-secondary">
                     Attribute value
                   </Form.Label>
 
-                  <Form.Control type="text" />
+                  <Form.Control
+                    onChange={(e) => setNewAttributeValue(e.target.value)}
+                    type="text"
+                  />
                 </Form.Group>
               </Col>
             </Row>
 
             <Row style={{ marginBottom: -30 }}>
               <div className="mt-3 text-end">
-                <Button variant="warning" onClick={createNewAttributeHandler}>
+                <Button
+                  size="sm"
+                  variant="warning"
+                  onClick={createNewAttributeHandler}
+                >
                   Add new attribute
                 </Button>
               </div>
