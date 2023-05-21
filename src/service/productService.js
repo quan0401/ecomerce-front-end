@@ -8,8 +8,12 @@ export const getProductsAdmin = async (abortController) =>
 export const deleteProductAdmin = async (productId) =>
   await instance.delete("/api/products/admin/" + productId);
 
-export const getProductById = async (productId) =>
-  await instance.get("/api/products/get-one/" + productId);
+export const getProductByIdApi = async (productId, abortController) => {
+  const signal = abortController ? abortController.signal : null;
+  return await instance.get("/api/products/get-one/" + productId, {
+    signal: signal,
+  });
+};
 
 export const getProductsApi = async () => await instance.get("/api/products");
 

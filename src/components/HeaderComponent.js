@@ -68,6 +68,15 @@ function HeaderComponent() {
           </Nav>
 
           <Nav>
+            <Nav.Link as={NavLink} to="/cart">
+              <Badge pill bg="danger">
+                {itemsCount !== 0 && itemsCount}
+              </Badge>
+
+              <i className="bi bi-cart"></i>
+
+              <span className="ms-1">Cart</span>
+            </Nav.Link>
             {userInfo.isAdmin ? (
               <>
                 <Nav.Link as={NavLink} to="/admin/my-orders">
@@ -92,16 +101,6 @@ function HeaderComponent() {
               </>
             ) : !userInfo.isAdmin && userInfo.firstName ? (
               <>
-                <Nav.Link as={NavLink} to="/cart">
-                  <Badge pill bg="danger">
-                    {itemsCount !== 0 && itemsCount}
-                  </Badge>
-
-                  <i className="bi bi-cart"></i>
-
-                  <span className="ms-1">Cart</span>
-                </Nav.Link>
-
                 <NavDropdown
                   title={userInfo.firstName + " " + userInfo.lastName}
                   id="collasible-nav-dropdown"

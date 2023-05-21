@@ -34,3 +34,9 @@ export const updateUserForAdminApi = async (userId, userData) =>
 
 export const getUserForAdminApi = async (userId) =>
   await instance.get("/api/users/" + userId);
+
+export const writeReviewApi = async (productId, reviewData) => {
+  return await instance.post("/api/users/review/" + productId, {
+    ...reviewData,
+  });
+};

@@ -1,6 +1,9 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+
 import { Link, useParams } from "react-router-dom";
+
 import { useState, useEffect } from "react";
+
 import { toast } from "react-toastify";
 
 function AdminEditUserPageComponent({
@@ -20,6 +23,7 @@ function AdminEditUserPageComponent({
     getUserForAdminApi(userId)
       .then((res) => {
         const { firstName, lastName, email, isAdmin } = res;
+
         setUserData((prev) => ({
           ...prev,
           firstName,
@@ -35,8 +39,11 @@ function AdminEditUserPageComponent({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     e.stopPropagation();
+
     const form = e.currentTarget.elements;
+
     updateUserForAdminApi(userId, {
       firstName: form.firstName.value,
       lastName: form.lastName.value,
@@ -45,8 +52,10 @@ function AdminEditUserPageComponent({
     })
       .then((res) => {
         const { savedUser, EC, EM } = res;
+
         if (EC === 0) {
           setUserData((prev) => ({ ...prev, ...savedUser }));
+
           toast.success(EM);
         }
       })

@@ -1,11 +1,13 @@
 import * as actionTypes from "../constans/cartConstants";
 
-import { getProductById } from "../../service/productService";
+import { getProductByIdApi } from "../../service/productService";
 
 export const addToCart =
   (productId, quantity, changeQuantiy = false) =>
   async (dispatch, getState) => {
-    const { _id, name, images, price, count } = await getProductById(productId);
+    const { _id, name, images, price, count } = await getProductByIdApi(
+      productId
+    );
 
     dispatch({
       type: actionTypes.ADD_TO_CART,

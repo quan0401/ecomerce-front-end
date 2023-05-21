@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-  getProductById,
+  getProductByIdApi,
   updateProductApi,
   deleteProductImage,
 } from "../../service/productService";
@@ -31,7 +31,7 @@ function AdminEditProductPage() {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    getProductById(productId)
+    getProductByIdApi(productId)
       .then((res) => {
         setProduct(res);
       })
@@ -52,7 +52,7 @@ function AdminEditProductPage() {
       {product && (
         <AdminEditProductPageComponent
           categories={categories}
-          getProductById={getProductById}
+          getProductByIdApi={getProductByIdApi}
           product={product}
           updateProductApi={updateProductApi}
           reduxDispatch={dispatch}

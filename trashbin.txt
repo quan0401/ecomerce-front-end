@@ -1,3 +1,7 @@
+checked
+ 
+value
+ 
 {}
  
 img={img}
