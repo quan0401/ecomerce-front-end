@@ -1,30 +1,66 @@
 import { Container, ListGroup, Col, Row, Button } from "react-bootstrap";
+
 import PaginationComponent from "../../components/PaginationComponent";
+
 import SortOptionComponent from "../../components/SortOptionComponent";
+
 import PriceFilterComponent from "../../components/filterQueryResultOptions/PriceFilterComponent";
+
 import RatingFilterComponent from "../../components/filterQueryResultOptions/RatingFilterComponent";
+
 import CategoryFilterComponent from "../../components/filterQueryResultOptions/CategoryFilterComponent";
+
 import AttributeFilterComponent from "../../components/filterQueryResultOptions/AttributeFilterComponent";
+
 import ProductForListComponent from "../../components/ProductForListComponent";
+
 import { useEffect, useState } from "react";
 
-const images = [
-  "images/img1.jpeg",
-  "images/img2.JPG",
-  "images/img3.jpeg",
-  "images/img4.jpeg",
-  "images/img6.jpg",
-  "images/img7.png",
-];
+import { useParams } from "react-router-dom";
 
-function ProductListPageComponent({ getProductsApi }) {
+function ProductListPageComponent({ getProductsApi, categories }) {
   const [products, setProducts] = useState([]);
+
+  const categoryName = useParams().categoryName.replace(",", "/");
+
+  const [categoryData, setCategoryData] = useState();
+
+  const [selectedAttributes, setSelectedAttributes] = useState([]);
+
+  const [rating, setRating] = useState();
+
+  // Collect filters
+  const [filters, setFilters] = useState({});
+
+  const [showResetFilterButton, setShowResetFilterButton] = useState(false);
+
+  const [price, setPrice] = useState(-2);
+
+  useEffect(() => {
+    if (categoryName) {
+      const categoryDataFound = categories.find(
+        (item) => item.name === categoryName
+      );
+
+      if (categoryDataFound) setCategoryData(categoryDataFound);
+    }
+  }, [categoryName, categories]);
+
+  const filterButtonHanlder = () => {
+    setShowResetFilterButton(true);
+    setFilters({
+      price,
+      selectedAttributes,
+      rating,
+    });
+  };
 
   useEffect(() => {
     getProductsApi().then((res) => {
       setProducts(res.products);
     });
   }, []);
+
   return (
     <Container>
       <Row className="mt-2">
@@ -35,11 +71,11 @@ function ProductListPageComponent({ getProductsApi }) {
             </ListGroup.Item>
 
             <ListGroup.Item className="py-3">
-              <PriceFilterComponent />
+              <PriceFilterComponent price={price} setPrice={setPrice} />
             </ListGroup.Item>
 
             <ListGroup.Item className="py-3">
-              <RatingFilterComponent />
+              <RatingFilterComponent rating={rating} setRating={setRating} />
             </ListGroup.Item>
 
             <ListGroup.Item className="py-3">
@@ -47,13 +83,24 @@ function ProductListPageComponent({ getProductsApi }) {
             </ListGroup.Item>
 
             <ListGroup.Item className="py-3">
-              <AttributeFilterComponent />
+              {categoryData && (
+                <AttributeFilterComponent
+                  attributes={categoryData.attributes}
+                  setSelectedAttributes={setSelectedAttributes}
+                />
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item className="py-3">
               <Row>
-                <Button className="mb-2">Filter</Button>
-                <Button variant="danger">Reset Filter</Button>
+                <Button onClick={filterButtonHanlder} className="mb-2">
+                  Filter
+                </Button>
+                {showResetFilterButton ? (
+                  <Button variant="danger">Reset Filter</Button>
+                ) : (
+                  <></>
+                )}
               </Row>
             </ListGroup.Item>
           </ListGroup>

@@ -13,12 +13,16 @@ const images = [
 function ProductForListComponent({ item }) {
   return (
     <Card>
-      <Row>
+      <Row className="align-items-center justify-content-between">
         <Col xl={12} lg={5}>
           <Card.Img
-            style={{ objectFit: "cover" }}
+            style={{
+              objectFit: "cover",
+              maxHeight: "30vh",
+              objectPosition: "center",
+            }}
             variant="top"
-            src={images[0]}
+            src={item.images[0].url || images[0]}
           />
         </Col>
 

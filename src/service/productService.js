@@ -1,4 +1,5 @@
 import instance from "../axios/setup";
+import Compressor from "compressorjs";
 
 export const getProductsAdmin = async (abortController) =>
   await instance.get("/api/products/admin", {
@@ -34,6 +35,57 @@ export const deleteProductImage = async (productId, imagePath) => {
   }
 };
 
+// export const uploadImageApi = async (images, productId) => {
+//   if (process.env.NODE_ENV === "production") {
+//     //to do change to !==
+//     const formData = new FormData();
+
+//     Array.from(images).forEach((img) => {
+//       formData.append("images", img);
+//     });
+
+//     return await instance.post(
+//       "/api/products/admin/upload?productId=" + productId,
+//       formData
+//     );
+//   } else {
+//     const cloudName = "dg3fsapzu";
+
+//     const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+//     const formData = new FormData();
+
+//     for (let i = 0; i < images.length; i++) {
+//       let file = images[i];
+
+//       formData.append("file", file);
+
+//       formData.append("upload_preset", "gvrttlre");
+
+//       let uploadedProductData;
+
+//       await fetch(url, {
+//         method: "POST",
+//         body: formData,
+//       })
+//         .then((response) => {
+//           return response.json();
+//         })
+//         .then((data) => {
+//           uploadedProductData = data;
+//         })
+//         .catch((error) => {
+//           console.log(error);
+//         });
+
+//       await instance.post(
+//         "/api/products/admin/upload?cloudinary=true&productId=" + productId,
+//         { imageUrl: uploadedProductData.url }
+//       );
+//     }
+//   }
+// };
+
 export const uploadImageApi = async (images, productId) => {
   if (process.env.NODE_ENV === "production") {
     //to do change to !==
@@ -52,17 +104,32 @@ export const uploadImageApi = async (images, productId) => {
 
     const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
 
-    const formData = new FormData();
-
     for (let i = 0; i < images.length; i++) {
       let file = images[i];
 
-      formData.append("file", file);
+      const compressFile = await new Promise((resolve) => {
+        new Compressor(file, {
+          quality: 0.8,
 
+          // The compression process is asynchronous,
+          // which means you have to access the `result` in the `success` hook function.
+          success(result) {
+            resolve(result);
+
+            // The third parameter is required for server
+          },
+          error(err) {
+            console.log(err.message);
+            resolve(file);
+          },
+        });
+      });
+
+      const formData = new FormData();
+      formData.append("file", compressFile);
       formData.append("upload_preset", "gvrttlre");
-
+      // Send the compressed image file to server with XMLHttpRequest.
       let uploadedProductData;
-
       await fetch(url, {
         method: "POST",
         body: formData,
@@ -77,10 +144,11 @@ export const uploadImageApi = async (images, productId) => {
           console.log(error);
         });
 
-      await instance.post(
-        "/api/products/admin/upload?cloudinary=true&productId=" + productId,
-        { imageUrl: uploadedProductData.url }
-      );
+      if (uploadedProductData)
+        await instance.post(
+          "/api/products/admin/upload?cloudinary=true&productId=" + productId,
+          { imageUrl: uploadedProductData.url }
+        );
     }
   }
 };

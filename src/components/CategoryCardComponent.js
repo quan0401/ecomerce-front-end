@@ -24,13 +24,10 @@ function CategoryCardComponent({ category, index }) {
       />
 
       <Card.Body>
-        <Card.Title>{category}</Card.Title>
+        <Card.Title>{category.name}</Card.Title>
 
-        <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text>
-        <Link to="/product-list">
+        <Card.Text>{category.description}</Card.Text>
+        <Link to={"/product-list/" + category.name.replace("/", ",")}>
           <Button variant="primary">Go somewhere</Button>
         </Link>
       </Card.Body>
