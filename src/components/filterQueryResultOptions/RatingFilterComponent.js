@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Rating } from "react-simple-star-rating";
 
@@ -10,10 +9,19 @@ function RatingFilterComponent({ rating, setRating }) {
         <br />
         {Array.from({ length: 5 }).map((item, index) => (
           <div key={index} className="d-flex align-items-center">
-            <Form.Check className="me-1" value={5 - index} type={"checkbox"} />
+            <Form.Check
+              onChange={(e) => {
+                setRating((prev) => ({
+                  ...prev,
+                  [e.target.value]: e.target.checked,
+                }));
+              }}
+              className="me-1"
+              value={5 - index}
+              type={"checkbox"}
+            />
             <Rating
               initialValue={5 - index}
-              onClick={(e) => setRating(e)}
               size={"24px"}
               readonly
               style={{ marginTop: "-3px" }}

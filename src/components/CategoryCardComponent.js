@@ -27,7 +27,7 @@ function CategoryCardComponent({ category, index }) {
         <Card.Title>{category.name}</Card.Title>
 
         <Card.Text>{category.description}</Card.Text>
-        <Link to={"/product-list/" + category.name.replace("/", ",")}>
+        <Link to={"/product-list/category/" + category.name.replace("/", ",")}>
           <Button variant="primary">Go somewhere</Button>
         </Link>
       </Card.Body>

@@ -1,15 +1,9 @@
 import { Form } from "react-bootstrap";
 
-const attributes = [
-  { color: ["red", "blue", "pink"] },
-  { ram: ["8gb", "16gb", "24gb", "32gb", "64gb", "96gb"] },
-];
-
 function AttributeFilterComponent({ attributes, setSelectedAttributes }) {
   return (
     <Form>
       {attributes &&
-        attributes.length > 0 &&
         attributes.map((attribute, index) => {
           return (
             <div key={index}>

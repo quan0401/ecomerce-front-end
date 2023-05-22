@@ -16,18 +16,24 @@ import ProductForListComponent from "../../components/ProductForListComponent";
 
 import { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 function ProductListPageComponent({ getProductsApi, categories }) {
   const [products, setProducts] = useState([]);
+  const currentPath = useLocation().pathname.split("/");
 
-  const categoryName = useParams().categoryName.replace(",", "/");
+  let categoryName = useParams().categoryName || "";
+  if (currentPath.indexOf("category") !== -1) {
+    categoryName = categoryName.replace(",", "/");
+  }
 
-  const [categoryData, setCategoryData] = useState();
+  const [attributesFromCats, setAttributesFromCats] = useState([]); // Collect attributes to show on webpage
 
   const [selectedAttributes, setSelectedAttributes] = useState([]);
 
-  const [rating, setRating] = useState();
+  const [rating, setRating] = useState({});
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   // Collect filters
   const [filters, setFilters] = useState({});
@@ -36,30 +42,57 @@ function ProductListPageComponent({ getProductsApi, categories }) {
 
   const [price, setPrice] = useState(-2);
 
-  useEffect(() => {
-    if (categoryName) {
-      const categoryDataFound = categories.find(
-        (item) => item.name === categoryName
-      );
+  const [sortOption, setSortOption] = useState("");
 
-      if (categoryDataFound) setCategoryData(categoryDataFound);
-    }
-  }, [categoryName, categories]);
+  const [pageNum, setPageNum] = useState(null);
+  const [paginationLinksNumber, setPaginationLinksNumber] = useState(null);
+
+  const pageNumParam = useParams().pageNumParam || 1;
+  const searchQuery = useParams().searchQuery || "";
 
   const filterButtonHanlder = () => {
     setShowResetFilterButton(true);
     setFilters({
-      price,
+      price: +price,
       selectedAttributes,
       rating,
+      selectedCategories,
     });
   };
 
   useEffect(() => {
-    getProductsApi().then((res) => {
-      setProducts(res.products);
-    });
-  }, []);
+    if (categoryName && selectedCategories.length === 0) {
+      const categoryDataFound = categories.find(
+        (item) => item.name === categoryName
+      );
+      if (categoryDataFound)
+        setAttributesFromCats(categoryDataFound.attributes);
+    } else if (selectedCategories.length > 0) {
+      let attributesData = [];
+      selectedCategories.forEach((selected) => {
+        categories.forEach((cate) => {
+          if (cate.name === selected) {
+            attributesData = [...attributesData, ...cate.attributes];
+          }
+        });
+      });
+      setAttributesFromCats(attributesData);
+    } else {
+      setAttributesFromCats([]);
+    }
+  }, [categoryName, categories, selectedCategories]);
+
+  useEffect(() => {
+    getProductsApi()
+      .then((res) => {
+        setPaginationLinksNumber(res.paginationLinksNumber);
+        setPageNum(res.pageNum);
+        setProducts(res.products);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [filters, sortOption, selectedCategories]);
 
   return (
     <Container>
@@ -67,7 +100,7 @@ function ProductListPageComponent({ getProductsApi, categories }) {
         <Col md={3}>
           <ListGroup>
             <ListGroup.Item className="py-3">
-              <SortOptionComponent />
+              <SortOptionComponent setSortOption={setSortOption} />
             </ListGroup.Item>
 
             <ListGroup.Item className="py-3">
@@ -77,15 +110,19 @@ function ProductListPageComponent({ getProductsApi, categories }) {
             <ListGroup.Item className="py-3">
               <RatingFilterComponent rating={rating} setRating={setRating} />
             </ListGroup.Item>
+            {currentPath.indexOf("category") === -1 && (
+              <ListGroup.Item className="py-3">
+                <CategoryFilterComponent
+                  selectedCategories={selectedCategories}
+                  setSelectedCategories={setSelectedCategories}
+                />
+              </ListGroup.Item>
+            )}
 
             <ListGroup.Item className="py-3">
-              <CategoryFilterComponent />
-            </ListGroup.Item>
-
-            <ListGroup.Item className="py-3">
-              {categoryData && (
+              {attributesFromCats && (
                 <AttributeFilterComponent
-                  attributes={categoryData.attributes}
+                  attributes={attributesFromCats}
                   setSelectedAttributes={setSelectedAttributes}
                 />
               )}
@@ -115,7 +152,12 @@ function ProductListPageComponent({ getProductsApi, categories }) {
             ))} */}
           </Row>
           <div className="mt-3 d-flex justify-content-center">
-            <PaginationComponent />
+            <PaginationComponent
+              pageNumParam={pageNumParam}
+              searchQuery={searchQuery}
+              categoryName={categoryName}
+              pageNum={pageNum}
+            />
           </div>
         </Col>
       </Row>

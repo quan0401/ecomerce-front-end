@@ -1,6 +1,11 @@
 import Pagination from "react-bootstrap/Pagination";
 
-function PaginationComponent() {
+function PaginationComponent({
+  pageNumParam,
+  searchQuery,
+  categoryName,
+  pageNum,
+}) {
   return (
     <Pagination>
       <Pagination.Prev />

@@ -109,7 +109,7 @@ export const uploadImageApi = async (images, productId) => {
 
       const compressFile = await new Promise((resolve) => {
         new Compressor(file, {
-          quality: 0.8,
+          quality: 0.9,
 
           // The compression process is asynchronous,
           // which means you have to access the `result` in the `success` hook function.

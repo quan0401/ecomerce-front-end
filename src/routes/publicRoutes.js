@@ -11,7 +11,30 @@ const routes = [
 
   { path: "/login", Component: LoginPage },
   { path: "/product-detail/:id", Component: ProductDetailPage },
-  { path: "/product-list/:categoryName", Component: ProductListPage },
+
+  // Product paths
+  { path: "/product-list", Component: ProductListPage },
+  { path: "/product-list/:pageNum", Component: ProductListPage },
+  { path: "/product-list/category/:categoryName", Component: ProductListPage },
+  {
+    path: "/product-list/category/:categoryName/:pageNum",
+    Component: ProductListPage,
+  },
+  { path: "/product-list/search/searchQuery", Component: ProductListPage },
+  {
+    path: "/product-list/search/searchQuery/:pageNum",
+    Component: ProductListPage,
+  },
+  {
+    path: "/product-list/category/:categoryName/search/searchQuery",
+    Component: ProductListPage,
+  },
+  {
+    path: "/product-list/category/:categoryName/search/searchQuery/:pageNum",
+    Component: ProductListPage,
+  },
+
+  //
   { path: "/register", Component: RegisterPage },
 
   {
