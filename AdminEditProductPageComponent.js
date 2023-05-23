@@ -87,7 +87,6 @@ function AdminEditProductPageComponent({
 
             return true;
           }
-          return false;
         }
       ));
 

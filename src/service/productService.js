@@ -1,10 +1,95 @@
 import instance from "../axios/setup";
 import Compressor from "compressorjs";
 
-export const getProductsAdmin = async (abortController) =>
-  await instance.get("/api/products/admin", {
+const generateFiltersUrl = (filters) => {
+  const keys = Object.keys(filters);
+  const url = keys.reduce((accUrl, key) => {
+    if (key === "price") {
+      if (filters[key] !== null) {
+        accUrl += `&price=${filters[key]}`;
+      }
+    } else if (key === "rating") {
+      // {1: true, 2: true}
+      let urlRating = "";
+      let existTrue = false;
+      Object.keys(filters[key]).forEach((innerKey, index) => {
+        if (filters[key][innerKey]) {
+          if (existTrue === false) {
+            urlRating += `&${key}=${innerKey}`;
+            existTrue = true;
+          } else urlRating += `,${innerKey}`;
+        }
+      });
+      accUrl += urlRating;
+    } else if (key === "category") {
+      // ['Books', 'Laptop']
+      let urlCategory = "";
+      if (filters[key].length > 0) {
+        filters[key].forEach((item, index) => {
+          if (index === 0) {
+            urlCategory = `&${key}=${item}`;
+          } else urlCategory += `,${item}`;
+        });
+      }
+      accUrl += urlCategory;
+    } else if (key === "attributes") {
+      // [ { key: "Processor", value: ["a", "b"] } ]
+      let urlAttributes = "";
+
+      if (filters[key].length > 0) {
+        filters[key].forEach((item, index) => {
+          if (index === 0) {
+            // to access "Processor"
+            const key1 = item["key"];
+
+            urlAttributes = `&${key}=${key1}`;
+            filters[key][index]["value"].forEach((item1) => {
+              urlAttributes += `-${item1}`;
+            });
+          } else {
+            // to access "Processor"
+            const key1 = item["key"];
+
+            urlAttributes += `,${key1}`;
+            filters[key][index]["value"].forEach((item1) => {
+              urlAttributes += `-${item1}`;
+            });
+          }
+        });
+      }
+
+      accUrl += urlAttributes;
+    }
+    return accUrl;
+  }, "");
+  return url;
+};
+
+export const getProductsApi = async (
+  abortController,
+  pageNumParam = null,
+  categoryName = "",
+  searchQuery = "",
+  sortOption = "",
+  filters = {}
+) => {
+  // filtersUrl = "&price=60&rating=1,2,3&category=a,b,c,d&attributes=color-red-blue,size-1TB-2TB";
+  const signal = abortController ? abortController.signal : null;
+  const category = categoryName ? `/category/${categoryName}/` : "";
+  const search = searchQuery ? `/search/${searchQuery}/` : "";
+  const filtersUrl = generateFiltersUrl(filters);
+
+  const url = `/api/products${category}${search}?pageNum=${pageNumParam}${filtersUrl}&sort=${sortOption}`;
+  console.log({ url });
+
+  return await instance.get(url, { signal: signal });
+};
+
+export const getProductsAdmin = async (abortController) => {
+  return await instance.get("/api/products/admin", {
     signal: abortController.signal,
   });
+};
 
 export const deleteProductAdmin = async (productId) =>
   await instance.delete("/api/products/admin/" + productId);
@@ -15,8 +100,6 @@ export const getProductByIdApi = async (productId, abortController) => {
     signal: signal,
   });
 };
-
-export const getProductsApi = async () => await instance.get("/api/products");
 
 export const updateProductApi = async (productId, productData) =>
   await instance.put("/api/products/admin/" + productId, { ...productData });

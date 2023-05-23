@@ -29,6 +29,9 @@ function ProductForListComponent({ item }) {
         <Col xl={12} lg={7}>
           <Card.Body>
             <Card.Title>{item.name}</Card.Title>
+            <div>
+              <b>Category: </b> {item.category}
+            </div>
             <Card.Text>{item.description}</Card.Text>
             <Rating
               initialValue={item.rating}

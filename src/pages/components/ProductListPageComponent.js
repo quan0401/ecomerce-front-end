@@ -16,14 +16,22 @@ import ProductForListComponent from "../../components/ProductForListComponent";
 
 import { useEffect, useState } from "react";
 
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+
+import { HashLoader } from "react-spinners";
 
 function ProductListPageComponent({ getProductsApi, categories }) {
   const [products, setProducts] = useState([]);
-  const currentPath = useLocation().pathname.split("/");
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  const currentPathname = useLocation().pathname;
   let categoryName = useParams().categoryName || "";
-  if (currentPath.indexOf("category") !== -1) {
+  const categoryNameToPass = useParams().categoryName || "";
+
+  // check if the pathname include category
+  if (currentPathname.match(/\/category/)) {
+    // http://localhost:3000/product-list/category/Books -> true
     categoryName = categoryName.replace(",", "/");
   }
 
@@ -40,23 +48,29 @@ function ProductListPageComponent({ getProductsApi, categories }) {
 
   const [showResetFilterButton, setShowResetFilterButton] = useState(false);
 
-  const [price, setPrice] = useState(-2);
+  const [price, setPrice] = useState(null);
 
   const [sortOption, setSortOption] = useState("");
 
   const [pageNum, setPageNum] = useState(null);
+
   const [paginationLinksNumber, setPaginationLinksNumber] = useState(null);
+
+  const [loading, setLoading] = useState(false);
 
   const pageNumParam = useParams().pageNumParam || 1;
   const searchQuery = useParams().searchQuery || "";
 
   const filterButtonHanlder = () => {
+    // replace http://localhost:3000/product-list/category/Books/2
+    // -> http://localhost:3000/product-list/category/Books/
+    navigate(location.pathname.replace(/\/[0-9]+$/, ""));
     setShowResetFilterButton(true);
     setFilters({
-      price: +price,
-      selectedAttributes,
+      price: price,
+      attributes: selectedAttributes,
       rating,
-      selectedCategories,
+      category: selectedCategories,
     });
   };
 
@@ -83,16 +97,36 @@ function ProductListPageComponent({ getProductsApi, categories }) {
   }, [categoryName, categories, selectedCategories]);
 
   useEffect(() => {
-    getProductsApi()
+    setLoading(true);
+    const abortController = new AbortController();
+    getProductsApi(
+      abortController,
+      pageNumParam,
+      categoryNameToPass,
+      searchQuery,
+      sortOption,
+      filters
+    )
       .then((res) => {
         setPaginationLinksNumber(res.paginationLinksNumber);
         setPageNum(res.pageNum);
         setProducts(res.products);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [filters, sortOption, selectedCategories]);
+
+    return () => {
+      abortController.abort();
+    };
+  }, [
+    filters,
+    sortOption,
+    // selectedCategories,
+    categoryNameToPass,
+    pageNumParam,
+  ]);
 
   return (
     <Container>
@@ -110,7 +144,8 @@ function ProductListPageComponent({ getProductsApi, categories }) {
             <ListGroup.Item className="py-3">
               <RatingFilterComponent rating={rating} setRating={setRating} />
             </ListGroup.Item>
-            {currentPath.indexOf("category") === -1 && (
+
+            {!currentPathname.match(/\/category/) && (
               <ListGroup.Item className="py-3">
                 <CategoryFilterComponent
                   selectedCategories={selectedCategories}
@@ -119,14 +154,14 @@ function ProductListPageComponent({ getProductsApi, categories }) {
               </ListGroup.Item>
             )}
 
-            <ListGroup.Item className="py-3">
-              {attributesFromCats && (
+            {attributesFromCats.length > 0 && (
+              <ListGroup.Item className="py-3">
                 <AttributeFilterComponent
                   attributes={attributesFromCats}
                   setSelectedAttributes={setSelectedAttributes}
                 />
-              )}
-            </ListGroup.Item>
+              </ListGroup.Item>
+            )}
 
             <ListGroup.Item className="py-3">
               <Row>
@@ -143,22 +178,38 @@ function ProductListPageComponent({ getProductsApi, categories }) {
           </ListGroup>
         </Col>
         <Col md={9}>
-          <Row xxl={3} xl={2} className="g-3">
-            {products.map((product, index) => (
-              <ProductForListComponent item={product} key={index} />
-            ))}
-            {/* {images.map((item, index) => (
+          {!loading ? (
+            <>
+              <Row xxl={3} xl={2} className="g-3">
+                {products.map((product, index) => (
+                  <ProductForListComponent item={product} key={index} />
+                ))}
+
+                {/* {images.map((item, index) => (
               <ProductForListComponent img={item} key={index} />
             ))} */}
-          </Row>
-          <div className="mt-3 d-flex justify-content-center">
-            <PaginationComponent
-              pageNumParam={pageNumParam}
-              searchQuery={searchQuery}
-              categoryName={categoryName}
-              pageNum={pageNum}
-            />
-          </div>
+              </Row>
+              <div className="mt-3 d-flex justify-content-center">
+                <PaginationComponent
+                  paginationLinksNumber={paginationLinksNumber}
+                  searchQuery={searchQuery}
+                  categoryName={categoryName}
+                  pageNum={pageNum}
+                />
+              </div>
+            </>
+          ) : (
+            <Row className="justify-content-center">
+              <HashLoader
+                loading={loading}
+                size={60}
+                color="#36d7b7"
+                aria-label="Loading Spinner"
+                data-testid="loader"
+                speedMultiplier={4}
+              />
+            </Row>
+          )}
         </Col>
       </Row>
     </Container>

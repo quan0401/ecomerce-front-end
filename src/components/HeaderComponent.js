@@ -53,7 +53,7 @@ function HeaderComponent() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto my-2 my-lg-0">
             <InputGroup>
-              <DropdownButton id="dropdown-basic-button" title="All">
+              <DropdownButton id="dropdown-basic-button" title="">
                 {categories.map((category, index) => (
                   <Dropdown.Item key={index}>{category.name}</Dropdown.Item>
                 ))}
