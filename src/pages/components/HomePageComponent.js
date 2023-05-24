@@ -1,12 +1,23 @@
 import CategoryCardComponent from "../../components/CategoryCardComponent";
 import ProductCarouselComponent from "../../components/ProductCarouselComponent";
+import { useEffect, useState } from "react";
 
 import { Container, Row } from "react-bootstrap";
 
-function HomePageComponent({ categories }) {
+function HomePageComponent({ categories, getBestsellerApi }) {
+  const [bestseller, setBestseller] = useState([]);
+  useEffect(() => {
+    getBestsellerApi()
+      .then((res) => {
+        setBestseller(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
     <>
-      <ProductCarouselComponent />
+      <ProductCarouselComponent bestseller={bestseller} />
       <Container className="mt-4">
         <Row xs={1} md={2} className="g-3">
           {categories &&

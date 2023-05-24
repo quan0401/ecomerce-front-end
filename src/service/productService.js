@@ -80,7 +80,6 @@ export const getProductsApi = async (
   const filtersUrl = generateFiltersUrl(filters);
 
   const url = `/api/products${category}${search}?pageNum=${pageNumParam}${filtersUrl}&sort=${sortOption}`;
-  console.log({ url });
 
   return await instance.get(url, { signal: signal });
 };
@@ -238,3 +237,7 @@ export const uploadImageApi = async (images, productId) => {
 
 export const createProductApi = async (productData) =>
   await instance.post("/api/products/admin", { ...productData });
+
+export const getBestsellerApi = async () => {
+  return await instance.get("/api/products/bestseller");
+};

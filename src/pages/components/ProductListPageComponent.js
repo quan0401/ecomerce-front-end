@@ -126,6 +126,7 @@ function ProductListPageComponent({ getProductsApi, categories }) {
     // selectedCategories,
     categoryNameToPass,
     pageNumParam,
+    searchQuery,
   ]);
 
   return (

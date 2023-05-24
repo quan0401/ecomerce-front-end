@@ -20,17 +20,17 @@ const routes = [
     path: "/product-list/category/:categoryName/:pageNumParam",
     Component: ProductListPage,
   },
-  { path: "/product-list/search/searchQuery", Component: ProductListPage },
+  { path: "/product-list/search/:searchQuery", Component: ProductListPage },
   {
-    path: "/product-list/search/searchQuery/:pageNumParam",
+    path: "/product-list/search/:searchQuery/:pageNumParam",
     Component: ProductListPage,
   },
   {
-    path: "/product-list/category/:categoryName/search/searchQuery",
+    path: "/product-list/category/:categoryName/search/:searchQuery",
     Component: ProductListPage,
   },
   {
-    path: "/product-list/category/:categoryName/search/searchQuery/:pageNumParam",
+    path: "/product-list/category/:categoryName/search/:searchQuery/:pageNumParam",
     Component: ProductListPage,
   },
 

@@ -1,54 +1,35 @@
 import Carousel from "react-bootstrap/Carousel";
 import { LinkContainer } from "react-router-bootstrap";
 
-function ProductCarouselComponent() {
+function ProductCarouselComponent({ bestseller = [] }) {
   return (
-    <Carousel style={{ overflow: "hidden" }}>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          style={{ objectFit: "cover", height: "300px" }}
-          src="images/img1.jpeg"
-          alt="First slide"
-        />
+    <Carousel variant="dark" style={{ overflow: "hidden", cursor: "pointer" }}>
+      {bestseller.length > 0 &&
+        bestseller.map((item, index) => (
+          <Carousel.Item style={{ height: "34vh" }} key={index}>
+            <div className="d-flex align-items-center justify-content-center">
+              <img
+                className="d-block"
+                style={{ objectFit: "cover", maxWidth: "80vw" }}
+                src={item.images.length > 0 ? item.images[0].url : ""}
+                alt={index + " slide"}
+              />
+            </div>
 
-        <LinkContainer to="/product-detail" style={{ cursor: "pointer" }}>
-          <Carousel.Caption>
-            <h3>Best Laptop</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </Carousel.Caption>
-        </LinkContainer>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          style={{ objectFit: "cover", height: "300px" }}
-          src="images/img2.JPG"
-          alt="Second slide"
-        />
-
-        <LinkContainer to="/product-detail" style={{ cursor: "pointer" }}>
-          <Carousel.Caption>
-            <h3>Best Laptop</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </Carousel.Caption>
-        </LinkContainer>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          style={{ objectFit: "cover", height: "300px" }}
-          src="images/img3.jpeg"
-          alt="Third slide"
-        />
-
-        <LinkContainer to="/product-detail" style={{ cursor: "pointer" }}>
-          <Carousel.Caption>
-            <h3>Best Laptop</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </Carousel.Caption>
-        </LinkContainer>
-      </Carousel.Item>
+            <LinkContainer
+              // className="d-none"
+              to="/product-detail"
+              style={{ cursor: "pointer" }}
+            >
+              {/* <Carousel.Caption> */}
+              <div className="d-md-block text-center">
+                <b>{item.name}</b>
+                <div>{item.description}</div>
+              </div>
+              {/* </Carousel.Caption> */}
+            </LinkContainer>
+          </Carousel.Item>
+        ))}
     </Carousel>
   );
 }

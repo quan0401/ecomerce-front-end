@@ -17,9 +17,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { logoutState } from "../redux/actions/userActions";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { getCategoriesAction } from "../redux/actions/categoryActions";
+
+import { getBestsellerApi } from "../service/productService";
 
 function HeaderComponent() {
   const navigate = useNavigate();
@@ -35,6 +37,31 @@ function HeaderComponent() {
   const { itemsCount } = useSelector((state) => state.cart);
 
   const { categories } = useSelector((state) => state.category);
+
+  const [searchCategoryToggle, setSearchCatogoryToggle] = useState("All");
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSubmit = (e) => {
+    if (e.key && e.key !== "Enter") return;
+
+    e.preventDefault();
+    const searchCategory = searchCategoryToggle.replaceAll("/", ",");
+    if (searchQuery.trim() !== "") {
+      if (searchCategoryToggle === "All") {
+        navigate(`/product-list/search/${searchQuery}`);
+      } else
+        navigate(
+          `/product-list/category/${searchCategory}/search/${searchQuery}`
+        );
+    } else {
+      if (searchCategoryToggle === "All") {
+        navigate(`/product-list`);
+      } else {
+        navigate(`/product-list/category/${searchCategory}`);
+      }
+    }
+  };
 
   // Good practive to put it in the dependency
   useEffect(() => {
@@ -53,15 +80,31 @@ function HeaderComponent() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto my-2 my-lg-0">
             <InputGroup>
-              <DropdownButton id="dropdown-basic-button" title="">
+              <DropdownButton
+                id="dropdown-basic-button"
+                title={searchCategoryToggle}
+              >
+                <Dropdown.Item onClick={(e) => setSearchCatogoryToggle("All")}>
+                  All
+                </Dropdown.Item>
                 {categories.map((category, index) => (
-                  <Dropdown.Item key={index}>{category.name}</Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={(e) => setSearchCatogoryToggle(category.name)}
+                    key={index}
+                  >
+                    {category.name}
+                  </Dropdown.Item>
                 ))}
               </DropdownButton>
 
-              <Form.Control type="text" placeholder="Normal text" />
+              <Form.Control
+                onKeyUp={handleSubmit}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                type="text"
+                placeholder="Search"
+              />
 
-              <Button variant="warning">
+              <Button onClick={handleSubmit} variant="warning">
                 <i className="bi bi-search"></i>
               </Button>
             </InputGroup>
