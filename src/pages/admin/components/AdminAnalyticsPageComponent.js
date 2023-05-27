@@ -1,5 +1,7 @@
 import { Container, Row, Col, Form } from "react-bootstrap";
+
 import AdminLinksComponent from "../../../components/admin/AdminLinksComponent";
+
 import { useEffect, useState } from "react";
 
 import {
@@ -144,15 +146,96 @@ const data = [
   },
 ];
 
-function AdminAnalyticsPageComponent() {
-  const [firstDate, setFirstDate] = useState(
+function AdminAnalyticsPageComponent({
+  getOrdersForAnalysisApi,
+  socketIOClient,
+  io,
+}) {
+  const [secondDate, setSecondDate] = useState(
     new Date().toISOString().substring(0, 10)
   );
+
   const prevDate = new Date();
+
   prevDate.setDate(prevDate.getDate() - 1);
-  const [secondDate, setSecondDate] = useState(
+
+  const [firstDate, setFirstDate] = useState(
     new Date(prevDate).toISOString().substring(0, 10)
   );
+
+  const [dataForFirstSet, setDataForFirstSet] = useState([]);
+  const [dataForSecondSet, setDataForSecondSet] = useState([]);
+
+  useEffect(() => {
+    // const socket = socketIOClient();
+    // socket.on("newOrder", (data) => {
+    //   console.log(data);
+    // });
+
+    // const socket = socketIOClient({
+    //   transports: ["polling"],
+    // });
+
+    const socket = socketIOClient();
+
+    socket.on("newOrder", (data) => {
+      console.log(data);
+    });
+
+    socket.on("connect_error", (error) => {
+      console.log("Connection error:", error);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from the server");
+    });
+  }, [firstDate, secondDate, setFirstDate, setSecondDate]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    getOrdersForAnalysisApi(firstDate, abortController)
+      .then((res1) => {
+        // { name: "3:00 PM", "2021 year": 100, "2022 year": 3026 },
+        const data = res1.reduce((acc, item) => {
+          const date = new Date(item.createdAt).toLocaleTimeString("en-US", {
+            hour: "numeric",
+            hour12: true,
+            timeZone: "UTC",
+          });
+          return [
+            ...acc,
+            { name: date, [firstDate]: item.orderTotal.cartSubTotal },
+          ];
+        }, []);
+        setDataForFirstSet(data);
+      })
+
+      .catch((error) => {
+        console.log(error);
+      });
+
+    getOrdersForAnalysisApi(secondDate, abortController)
+      .then((res2) => {
+        // { name: "3:00 PM", "2021 year": 100, "2022 year": 3026 },
+        const data = res2.reduce((acc, item) => {
+          const date = new Date(item.createdAt).toLocaleTimeString("en-US", {
+            hour: "numeric",
+            hour12: true,
+            timeZone: "UTC",
+          });
+          return [
+            ...acc,
+            { name: date, [secondDate]: item.orderTotal.cartSubTotal },
+          ];
+        }, []);
+        setDataForSecondSet(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    return () => abortController.abort();
+  }, [firstDate, secondDate]);
   return (
     <Container>
       <Row className="mt-3">
@@ -169,14 +252,22 @@ function AdminAnalyticsPageComponent() {
               <Form.Label className="fw-bold">
                 Select first date to compare
               </Form.Label>
-              <Form.Control type="date" defaultValue={firstDate} />
+              <Form.Control
+                onChange={(e) => setFirstDate(e.target.value)}
+                type="date"
+                defaultValue={firstDate}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label className="fw-bold">
                 Select second date to compare
               </Form.Label>
-              <Form.Control type="date" defaultValue={secondDate} />
+              <Form.Control
+                onChange={(e) => setSecondDate(e.target.value)}
+                type="date"
+                defaultValue={secondDate}
+              />
             </Form.Group>
           </Form>
 
@@ -184,7 +275,8 @@ function AdminAnalyticsPageComponent() {
             <LineChart
               width={500}
               height={300}
-              data={data}
+              // data={data}
+              // data={dataForFirstSet}
               margin={{
                 top: 5,
                 right: 0,
@@ -201,9 +293,11 @@ function AdminAnalyticsPageComponent() {
                   offset: 50,
                   position: "insideBottomRight",
                 }}
+                allowDuplicatedCategory={false}
               />
 
               <YAxis
+                // dataKey={firstDate}
                 label={{
                   value: "Revenue",
                   position: "top",
@@ -215,14 +309,45 @@ function AdminAnalyticsPageComponent() {
 
               <Legend verticalAlign="top" height={36} />
 
-              <Line
-                type="monotone"
-                dataKey="2021 year"
-                stroke="#8884d8"
-                activeDot={{ r: 8 }}
-              />
+              {dataForFirstSet.length > dataForSecondSet.length ? (
+                <>
+                  <Line
+                    data={dataForFirstSet}
+                    type="monotone"
+                    dataKey={firstDate}
+                    stroke="#8884d8"
+                    activeDot={{ r: 8 }}
+                    strokeWidth={4}
+                  />
+                  <Line
+                    data={dataForSecondSet}
+                    type="monotone"
+                    dataKey={secondDate}
+                    stroke="#82ca9d"
+                    strokeWidth={4}
+                  />
+                </>
+              ) : (
+                <>
+                  <Line
+                    data={dataForSecondSet}
+                    type="monotone"
+                    dataKey={secondDate}
+                    stroke="#8884d8"
+                    activeDot={{ r: 8 }}
+                    strokeWidth={4}
+                  />
+                  <Line
+                    data={dataForFirstSet}
+                    type="monotone"
+                    dataKey={firstDate}
+                    stroke="#82ca9d"
+                    strokeWidth={4}
+                  />
+                </>
+              )}
 
-              <Line type="monotone" dataKey="2022 year" stroke="#82ca9d" />
+              {/* <Line type="monotone" dataKey="2022 year" stroke="#82ca9d" /> */}
             </LineChart>
           </ResponsiveContainer>
         </Col>

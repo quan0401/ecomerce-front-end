@@ -6,11 +6,17 @@ function ProductCarouselComponent({ bestseller = [] }) {
     <Carousel variant="dark" style={{ overflow: "hidden", cursor: "pointer" }}>
       {bestseller.length > 0 &&
         bestseller.map((item, index) => (
-          <Carousel.Item style={{ height: "34vh" }} key={index}>
-            <div className="d-flex align-items-center justify-content-center">
+          <Carousel.Item style={{ height: "50vh" }} key={index}>
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ height: "80%", marginTop: "-30px" }}
+            >
               <img
-                className="d-block"
-                style={{ objectFit: "cover", maxWidth: "80vw" }}
+                style={{
+                  objectFit: "cover",
+                  maxWidth: "80vw",
+                  maxHeight: "90%",
+                }}
                 src={item.images.length > 0 ? item.images[0].url : ""}
                 alt={index + " slide"}
               />
@@ -22,7 +28,7 @@ function ProductCarouselComponent({ bestseller = [] }) {
               style={{ cursor: "pointer" }}
             >
               {/* <Carousel.Caption> */}
-              <div className="d-md-block text-center">
+              <div className="text-center">
                 <b>{item.name}</b>
                 <div>{item.description}</div>
               </div>

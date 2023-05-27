@@ -18,3 +18,11 @@ export const createOrderApi = async (orderData) =>
   await instance.post("/api/orders", { ...orderData });
 
 export const getOrdersUserApi = async () => await instance.get("/api/orders");
+
+export const getOrdersForAnalysisApi = async (firstDate, abortController) => {
+  const signal =
+    abortController && abortController.signal ? abortController.signal : null;
+  return await instance.get(`/api/orders/analysis?firstDate=${firstDate}`, {
+    signal: signal,
+  });
+};
