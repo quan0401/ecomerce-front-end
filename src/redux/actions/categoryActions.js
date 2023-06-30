@@ -10,7 +10,7 @@ import {
   CREATE_NEW_ATTR_FOR_CATE,
   INSERT_NEW_CATEGORY,
   DELETE_CATEGORY,
-} from "../constans/categoryConstants";
+} from "../constants/categoryConstants";
 
 export const getCategoriesAction = () => async (dispatch) => {
   const categories = await getCategories();

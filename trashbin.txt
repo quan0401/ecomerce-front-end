@@ -1,3 +1,125 @@
+{ io 
+ 
+{
+      transports: ["websocket"],
+    }
+ 
+{
+      transports: ["websocket"],
+    })
+ 
+o("http://localhost:8000", {
+      transports: ["polling"],
+    });
+ 
+/admin/analytics
+ 
+ttp://your-server-url
+ 
+ENDPOINT, {
+      transports: ["websocket"],
+    }
+ 
+OfDate1
+ 
+style={{ height: "10%" }}
+ 
+h-100
+ 
+className="d-flex align-items-center justify-content-center"
+ 
+console.log(firstDate);
+ 
+secondDate
+ 
+&secondDate=${secondDate}
+ 
+"slide"
+ 
+style={{ height: "40vh" }}
+ 
+ height: "300px"
+ 
+images/img1.jpeg"
+ 
+(
+        <Carousel.Item>
+          <img
+            className="d-block w-100"
+            style={{ objectFit: "cover", height: "300px" }}
+            src="images/img1.jpeg"
+            alt="First slide"
+          />
+
+          <LinkContainer to="/product-detail" style={{ cursor: "pointer" }}>
+            <Carousel.Caption>
+              <h3>Best Laptop</h3>
+              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+            </Carousel.Caption>
+          </LinkContainer>
+        </Carousel.Item>
+ 
+console.log(123);
+ 
+ if (e.key === "Enter") {
+        console.log("enter");
+      }
+    }
+ 
+f (e.key === "Enter") {
+        console.log("enter");
+      }
+    }
+ 
+else if (searchQuery ) {
+
+      }
+ 
+className="align-items-center"
+ 
+"tesing", 
+ 
+value
+ 
+ else urlAttributes += `,${item}`;
+ 
+ : (
+              <h1>Loading</h1>
+            )}
+ 
+console.log(innerKey);
+ 
+if ()
+ 
+2
+ 
+<Pagination.Next disabled={paginationLinksNumber === pageNum} />
+ 
+Navigate
+ 
+pathname
+ 
+.indexOf("category")
+ 
+.split("/")
+ 
+/\/[0-9]+$/
+ 
+.match("http://localhost:3000/product-list/category/Books,Fiction")
+ 
+|| "";
+ 
+console.log(sortOption);
+ 
+useLoaderData
+ 
+if ()
+ 
+{
+                  ...prev,
+                  [e.target.value]: e.target.checked,
+                }
+ 
 checked
  
 value

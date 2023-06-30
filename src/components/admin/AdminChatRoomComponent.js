@@ -1,12 +1,13 @@
 import { Fragment, useState } from "react";
 import { Button, Toast, Form } from "react-bootstrap";
 
-function AdminChatRoomComponent() {
+function AdminChatRoomComponent({ chatRoom }) {
   const [showA, setShowA] = useState(true);
-  const [showB, setShowB] = useState(true);
+  // const [showB, setShowB] = useState(true);
 
   const toggleShowA = () => setShowA(!showA);
-  const toggleShowB = () => setShowB(!showB);
+  // const toggleShowB = () => setShowB(!showB);
+  console.log(chatRoom);
 
   return (
     <div className="d-flex">
@@ -59,7 +60,7 @@ function AdminChatRoomComponent() {
         </Toast>
       </div>
 
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <Button onClick={toggleShowB} className="mb-2">
           Show chat with John Doe
         </Button>
@@ -106,7 +107,7 @@ function AdminChatRoomComponent() {
             </Button>
           </Form>
         </Toast>
-      </div>
+      </div> */}
     </div>
   );
 }

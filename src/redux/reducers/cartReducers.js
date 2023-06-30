@@ -1,4 +1,4 @@
-import * as actionTypes from "../constans/cartConstants";
+import * as actionTypes from "../constants/cartConstants";
 
 const localStorageCart = JSON.parse(localStorage.getItem("cart"));
 

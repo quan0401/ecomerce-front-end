@@ -3,7 +3,7 @@ import {
   CREATE_NEW_ATTR_FOR_CATE,
   INSERT_NEW_CATEGORY,
   DELETE_CATEGORY,
-} from "../constans/categoryConstants";
+} from "../constants/categoryConstants";
 
 const categoryReducer = (state = { categories: [] }, action) => {
   switch (action.type) {

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import UserChatComponent from "./UserChatComponent";
+import UserChatComponent from "./UserChatComponent/UserChatComponent";
 
 function RoutesUserChatComponent() {
   return (

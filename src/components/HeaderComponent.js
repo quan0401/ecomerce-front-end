@@ -23,6 +23,10 @@ import { getCategoriesAction } from "../redux/actions/categoryActions";
 
 import { getBestsellerApi } from "../service/productService";
 
+import socketIOClient from "socket.io-client";
+
+import { setChatRoom } from "../redux/actions/chatActions";
+
 function HeaderComponent() {
   const navigate = useNavigate();
 
@@ -62,6 +66,14 @@ function HeaderComponent() {
       }
     }
   };
+  useEffect(() => {
+    const socket = socketIOClient();
+    if (userInfo.isAdmin) {
+      socket.on("server sends message from client to admin", ({ message }) => {
+        dispatch(setChatRoom("exampleUser", message));
+      });
+    }
+  }, [userInfo.isAdmin]);
 
   // Good practive to put it in the dependency
   useEffect(() => {

@@ -1,4 +1,4 @@
-import * as actionTypes from "../constans/userConstants";
+import * as actionTypes from "../constants/userConstants";
 import { clearToken } from "../../service/cookieService";
 export const setReduxUserState = (user) => (dispatch) => {
   dispatch({

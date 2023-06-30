@@ -189,6 +189,7 @@ function AdminAnalyticsPageComponent({
     socket.on("disconnect", () => {
       console.log("Disconnected from the server");
     });
+    return () => socket.disconnect();
   }, [firstDate, secondDate, setFirstDate, setSecondDate]);
 
   useEffect(() => {
