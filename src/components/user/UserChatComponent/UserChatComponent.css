@@ -14,6 +14,14 @@
   right: 20px;
 }
 
+.dot-nofitication {
+  position: absolute;
+  color: red;
+  font-size: 1rem;
+  top: -6px;
+  left: 0;
+}
+
 .chat-popup {
   position: fixed;
   display: flex;
@@ -39,9 +47,9 @@
 }
 
 .chat-container {
-  min-height: 200px;
-  max-height: 300px;
-  overflow-y: auto;
+  /* min-height: 200px; */
+  height: 300px;
+  overflow: auto;
 }
 
 .chat-container .client {

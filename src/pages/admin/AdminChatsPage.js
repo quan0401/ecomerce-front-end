@@ -1,10 +1,13 @@
 import { Container, Row, Col } from "react-bootstrap";
 import AdminLinksComponent from "../../components/admin/AdminLinksComponent";
 import AdminChatRoomComponent from "../../components/admin/AdminChatRoomComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setNewNofi } from "../../redux/actions/chatActions";
 
 function AdminChatsPage() {
-  const { chatRooms } = useSelector((state) => state.adminChat);
+  const { chatRooms, socket } = useSelector((state) => state.adminChat);
+  const dispatch = useDispatch();
+
   return (
     <Container>
       <Row className="mt-3">
@@ -14,7 +17,15 @@ function AdminChatsPage() {
         <Col md={10}>
           <Row>
             {Object.entries(chatRooms).map((chatRoom, index) => (
-              <AdminChatRoomComponent key={index} chatRoom={chatRoom} />
+              <Col key={index} md={6}>
+                <AdminChatRoomComponent
+                  socket={socket}
+                  roomIndex={index}
+                  chatRoom={chatRoom}
+                  reduxDispatch={dispatch}
+                  setNewNofi={setNewNofi}
+                />
+              </Col>
             ))}
           </Row>
         </Col>

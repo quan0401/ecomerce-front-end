@@ -1,6 +1,8 @@
 import * as chatConstants from "../constants/chatConstants";
 const CHAT_INITIAL_STATE = {
   chatRooms: {},
+  socket: false,
+  newNofi: false,
 };
 
 const adminChatReducer = (state = CHAT_INITIAL_STATE, action) => {
@@ -22,6 +24,16 @@ const adminChatReducer = (state = CHAT_INITIAL_STATE, action) => {
           },
         };
     }
+    case chatConstants.SET_SOCKET:
+      return {
+        ...state,
+        socket: action.payload.socket,
+      };
+    case chatConstants.SET_NOFI:
+      return {
+        ...state,
+        newNofi: action.payload.newNofi,
+      };
     default:
       return state;
   }

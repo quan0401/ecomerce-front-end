@@ -25,7 +25,8 @@ import { getBestsellerApi } from "../service/productService";
 
 import socketIOClient from "socket.io-client";
 
-import { setChatRoom } from "../redux/actions/chatActions";
+import { setChatRoom, setNewNofi } from "../redux/actions/chatActions";
+import { setSocket } from "../redux/actions/chatActions";
 
 function HeaderComponent() {
   const navigate = useNavigate();
@@ -41,6 +42,8 @@ function HeaderComponent() {
   const { itemsCount } = useSelector((state) => state.cart);
 
   const { categories } = useSelector((state) => state.category);
+
+  const { newNofi } = useSelector((state) => state.adminChat);
 
   const [searchCategoryToggle, setSearchCatogoryToggle] = useState("All");
 
@@ -66,13 +69,17 @@ function HeaderComponent() {
       }
     }
   };
+
   useEffect(() => {
     const socket = socketIOClient();
     if (userInfo.isAdmin) {
       socket.on("server sends message from client to admin", ({ message }) => {
+        dispatch(setNewNofi(true));
+        dispatch(setSocket(socket));
         dispatch(setChatRoom("exampleUser", message));
       });
     }
+    return () => socket.disconnect();
   }, [userInfo.isAdmin]);
 
   // Good practive to put it in the dependency
@@ -136,9 +143,11 @@ function HeaderComponent() {
               <>
                 <Nav.Link as={NavLink} to="/admin/my-orders">
                   Admin
-                  <span className="position-absolute top-2 start-90 translate-middle p-2 bg-danger border border-light rounded-circle">
-                    <span className="visually-hidden">New alerts</span>
-                  </span>
+                  {newNofi && (
+                    <span className="position-absolute top-2 start-90 translate-middle p-2 bg-danger border border-light rounded-circle">
+                      {/* <span className="visually-hidden">New alerts</span> */}
+                    </span>
+                  )}
                 </Nav.Link>
 
                 <NavDropdown

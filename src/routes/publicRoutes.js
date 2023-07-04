@@ -7,7 +7,9 @@ import RegisterPage from "../pages/RegisterPage";
 
 const routes = [
   { path: "/cart", Component: CartPage },
+
   { path: "/home", Component: HomePage },
+  { path: "/", Component: HomePage },
 
   { path: "/login", Component: LoginPage },
   { path: "/product-detail/:id", Component: ProductDetailPage },

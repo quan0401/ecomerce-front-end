@@ -9,27 +9,47 @@ function UserChatComponent() {
   const [socket, setSocket] = useState();
   const [chat, setChat] = useState([{ admin: "Hello" }]);
   const [chatText, setChatText] = useState("");
+  const [showDot, setShowDot] = useState(0);
+
   const { isAdmin } = useSelector((state) => state.userRegisterLogin.userInfo);
+
+  const chatContainerRef = useRef(null);
 
   const chatBoxRef = useRef();
 
   useEffect(() => {
     const socket = socketIOClient.connect();
     setSocket(socket);
+    socket.on("server sends message from admin to client", ({ message }) => {
+      setShowDot((prev) => prev + 1);
+      setChat((prev) => [...prev, { admin: message }]);
+      if (chatContainerRef.current)
+        chatContainerRef.current.scrollTop =
+          chatContainerRef.current.scrollHeight;
+    });
     return () => socket.disconnect();
   }, []);
 
   const handleSubmit = (e) => {
-    if (e.keyCode && e.keyCode !== 13) return;
+    if (!isAdmin) {
+      if (e.keyCode && e.keyCode !== 13) return;
+      const chatMessage = chatText.trim();
 
-    if (chatText === null || chatText === "" || chatText === false || !chatText)
-      return;
+      if (
+        chatMessage === null ||
+        chatMessage.trim() === "" ||
+        chatMessage === false ||
+        !chatMessage
+      )
+        return;
 
-    setChat((prev) => [...prev, { client: chatText }]);
-    setChatText("");
-    chatBoxRef.current.focus();
+      setChat((prev) => [...prev, { client: chatMessage }]);
+      setShowDot(0);
+      setChatText("");
+      chatBoxRef.current.focus();
 
-    socket.emit("client sends message", chatText);
+      socket.emit("client sends message", chatMessage);
+    }
   };
 
   return (
@@ -38,7 +58,7 @@ function UserChatComponent() {
         <div className="form-popup" id="myForm">
           <div className="form-container">
             <h2>Chat</h2>
-            <div className="chat-container">
+            <div ref={chatContainerRef} className="chat-container">
               {chat.map((item, index) => {
                 const [key] = Object.keys(item);
                 if (key === "client")
@@ -54,36 +74,6 @@ function UserChatComponent() {
                     </div>
                   );
               })}
-              {/* <div className="chat-msg-container">
-                <div className="chat-msg">hello1</div>
-              </div>
-              <div className="chat-msg-container admin">
-                <div className="chat-msg">hello1</div>
-              </div>
-              <div className="chat-msg-container">
-                <div className="chat-msg">hello1</div>
-              </div>
-              <div className="chat-msg-container admin">
-                <div className="chat-msg">
-                  ahhnope ahhnope ahhnope ahhnope ahhnope ahhnope ahhnope ahh
-                  nope ahh nope ahhnope{" "}
-                </div>
-              </div>
-              <div className="chat-msg-container">
-                <div className="chat-msg">hello1</div>
-              </div>
-              <div className="chat-msg-container admin">
-                <div className="chat-msg">hello1</div>
-              </div>
-              <div className="chat-msg-container">
-                <div className="chat-msg">hello1</div>
-              </div>
-              <div className="chat-msg-container admin">
-                <div className="chat-msg">
-                  ahhnope ahhnope ahhnope ahhnope ahhnope ahhnope ahhnope ahh
-                  nope ahh nope ahhnope{" "}
-                </div>
-              </div> */}
             </div>
 
             <Form>
@@ -119,15 +109,20 @@ function UserChatComponent() {
           </div>
         </div>
       )}
-      <div className="chat-circle" onClick={() => setHideChat(!hideChat)}>
-        {hideChat ? (
-          <i className="bi bi-chat-heart-fill"></i>
-        ) : (
-          <>
-            <i className="bi bi-x-circle"></i>
-          </>
-        )}
-      </div>
+      {!isAdmin && (
+        <div className="chat-circle" onClick={() => setHideChat(!hideChat)}>
+          {showDot !== 0 && (
+            <i className="bi bi-circle-fill dot-nofitication"></i>
+          )}
+          {hideChat ? (
+            <i className="bi bi-chat-heart-fill"></i>
+          ) : (
+            <>
+              <i className="bi bi-x-circle"></i>
+            </>
+          )}
+        </div>
+      )}
     </>
   );
 }
