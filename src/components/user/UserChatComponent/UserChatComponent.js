@@ -27,6 +27,13 @@ function UserChatComponent() {
         chatContainerRef.current.scrollTop =
           chatContainerRef.current.scrollHeight;
     });
+    socket.on("no admins", () => {
+      setShowDot((prev) => prev + 1);
+      setChat((prev) => [...prev, { admin: "No admin at the moment" }]);
+      if (chatContainerRef.current)
+        chatContainerRef.current.scrollTop =
+          chatContainerRef.current.scrollHeight;
+    });
     return () => socket.disconnect();
   }, []);
 

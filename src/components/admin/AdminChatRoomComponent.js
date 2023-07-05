@@ -8,6 +8,7 @@ function AdminChatRoomComponent({
   roomIndex,
   reduxDispatch,
   setNewNofi,
+  socketUser,
 }) {
   const [showA, setShowA] = useState(true);
   const [rerender, setRerender] = useState(false);
@@ -15,6 +16,7 @@ function AdminChatRoomComponent({
   const [showScrollToNewMessage, setShowScrollToNewMessage] = useState(false);
   const messageContainerRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  console.log(chatRoom);
 
   const toggleShowA = () => setShowA(!showA);
   const scrollToNewestMessage = () => {
@@ -31,7 +33,7 @@ function AdminChatRoomComponent({
     else if (chatMsg === "") return;
     reduxDispatch(setNewNofi(false));
     chatRoom[1].push({ admin: chatMsg });
-    socket.emit("admin sends message", chatMsg);
+    socket.emit("admin sends message", { message: chatMsg, user: socketUser });
     setTextMsg("");
     setRerender(!rerender);
     messageContainerRef.current.focus();

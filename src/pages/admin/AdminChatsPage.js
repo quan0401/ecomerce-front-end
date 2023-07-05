@@ -24,6 +24,7 @@ function AdminChatsPage() {
                   chatRoom={chatRoom}
                   reduxDispatch={dispatch}
                   setNewNofi={setNewNofi}
+                  socketUser={chatRoom[0]}
                 />
               </Col>
             ))}

@@ -73,11 +73,18 @@ function HeaderComponent() {
   useEffect(() => {
     const socket = socketIOClient();
     if (userInfo.isAdmin) {
-      socket.on("server sends message from client to admin", ({ message }) => {
-        dispatch(setNewNofi(true));
-        dispatch(setSocket(socket));
-        dispatch(setChatRoom("exampleUser", message));
-      });
+      socket.emit(
+        "admin connects to server",
+        Math.floor(Math.random() * 10000)
+      );
+      socket.on(
+        "server sends message from client to admin",
+        ({ message, client }) => {
+          dispatch(setNewNofi(true));
+          dispatch(setSocket(socket));
+          dispatch(setChatRoom(client, message));
+        }
+      );
     }
     return () => socket.disconnect();
   }, [userInfo.isAdmin]);
