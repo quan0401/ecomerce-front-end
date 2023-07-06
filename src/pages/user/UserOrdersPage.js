@@ -1,4 +1,4 @@
-import UserOrdersPageComponent from "../user/components/UserOrdersPageComponent";
+import UserOrdersPageComponent from "./components/UserOrdersPageComponent";
 
 import { getOrdersUserApi } from "../../service/orderService";
 

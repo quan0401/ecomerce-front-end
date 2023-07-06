@@ -53,7 +53,7 @@ function HeaderComponent() {
     if (e.key && e.key !== "Enter") return;
 
     e.preventDefault();
-    const searchCategory = searchCategoryToggle.replaceAll("/", ",");
+    const searchCategory = searchCategoryToggle.replace(/\//g, ",");
     if (searchQuery.trim() !== "") {
       if (searchCategoryToggle === "All") {
         navigate(`/product-list/search/${searchQuery}`);
