@@ -25,3 +25,11 @@ export const setNewNofi = (newNofi) => (dispatch, getState) => {
     type: chatConstants.SET_NOFI,
   });
 };
+export const adminDeleteChart = (socketId) => (dispatch, getState) => {
+  dispatch({
+    payload: {
+      socketId,
+    },
+    type: chatConstants.ADMIN_DELETE_CHAT,
+  });
+};

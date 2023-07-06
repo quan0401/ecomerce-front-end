@@ -16,7 +16,6 @@ function AdminChatRoomComponent({
   const [showScrollToNewMessage, setShowScrollToNewMessage] = useState(false);
   const messageContainerRef = useRef(null);
   const scrollContainerRef = useRef(null);
-  console.log(chatRoom);
 
   const toggleShowA = () => setShowA(!showA);
   const scrollToNewestMessage = () => {
@@ -38,6 +37,11 @@ function AdminChatRoomComponent({
     setRerender(!rerender);
     messageContainerRef.current.focus();
   };
+
+  const deleteConversation = () => {
+    socket.emit("admin deleted conversation", "");
+  };
+
   const scrollFunc = (e) => {
     if (e.target.scrollTop < 0.3 * e.target.scrollHeight)
       setShowScrollToNewMessage(true);
@@ -52,9 +56,16 @@ function AdminChatRoomComponent({
     <div className="d-flex">
       <div className="mb-4 me-3">
         {!showA && (
-          <Button onClick={toggleShowA} className="mb-2">
-            Chat with {chatRoom[0]}
-          </Button>
+          <>
+            <div className="d-flex align-items-center mb-2">
+              <Button className="me-1" onClick={toggleShowA}>
+                Chat with {chatRoom[0]}
+              </Button>
+              <Button onClick={deleteConversation} variant="danger">
+                <i className="bi bi-x-circle-fill "></i>
+              </Button>
+            </div>
+          </>
         )}
 
         <Toast show={showA} onClose={toggleShowA}>

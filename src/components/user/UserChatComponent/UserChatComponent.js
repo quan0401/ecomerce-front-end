@@ -10,6 +10,7 @@ function UserChatComponent() {
   const [chat, setChat] = useState([{ admin: "Hello" }]);
   const [chatText, setChatText] = useState("");
   const [showDot, setShowDot] = useState(0);
+  const [newChatConnection, setNewChatConnection] = useState(false);
 
   const { isAdmin } = useSelector((state) => state.userRegisterLogin.userInfo);
 
@@ -30,12 +31,13 @@ function UserChatComponent() {
     socket.on("no admins", () => {
       setShowDot((prev) => prev + 1);
       setChat((prev) => [...prev, { admin: "No admin at the moment" }]);
-      if (chatContainerRef.current)
-        chatContainerRef.current.scrollTop =
-          chatContainerRef.current.scrollHeight;
+    });
+    socket.on("admin deleted chat", (message) => {
+      setChat((prev) => [...prev, { admin: message }]);
+      setNewChatConnection(true);
     });
     return () => socket.disconnect();
-  }, []);
+  }, [newChatConnection]);
 
   const handleSubmit = (e) => {
     if (!isAdmin) {
@@ -54,6 +56,9 @@ function UserChatComponent() {
       setShowDot(0);
       setChatText("");
       chatBoxRef.current.focus();
+      if (chatContainerRef.current)
+        chatContainerRef.current.scrollTop =
+          chatContainerRef.current.scrollHeight;
 
       socket.emit("client sends message", chatMessage);
     }

@@ -19,6 +19,7 @@ import ImageZoom from "js-image-zoom";
 
 import { useParams } from "react-router-dom";
 import { writeReviewApi } from "../../service/userService";
+import MetaComponent from "../../components/MetaComponent";
 
 const images = ["/images/img1.jpeg", "/images/img2.JPG", "/images/img3.jpeg"];
 
@@ -89,161 +90,164 @@ function ProductDetailPageComponent({
   };
 
   return (
-    <Container>
-      <AddedToCartMessageComponent
-        show={showMessage}
-        setShow={setShowMessage}
-      />
-      <Row className="mt-3">
-        {product && (
-          <Col style={{ zIndex: 1 }} md={4} className="p-4">
-            {product.images.map((img, index) => (
-              <div key={index} id={"img-" + index}>
-                <Image
-                  crossOrigin="anonymous"
-                  className="mb-3"
-                  src={img.url}
-                  style={{ objectFit: "cover" }}
-                  rounded
-                  fluid
-                />
-              </div>
-            ))}
-          </Col>
-        )}
-
-        <Col md={8}>
-          <Row>
-            <Col md={8}>
-              <ListGroup variant="flush">
-                <ListGroup.Item as={"h1"}>{product?.name}</ListGroup.Item>
-
-                <ListGroup.Item>
-                  <Rating size={24} initialValue={product?.rating} />
-
-                  <span style={{ marginTop: "-12px" }}>
-                    ({product?.reviewsNumber})
-                  </span>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  Price: <span className="fw-bold">${product?.price} </span>
-                </ListGroup.Item>
-
-                <ListGroup.Item>{product?.description}</ListGroup.Item>
-              </ListGroup>
-              <hr />
-            </Col>
-
-            <Col md={4}>
-              <ListGroup>
-                <ListGroup.Item>
-                  Status: <span className="fw-bold">In stock</span>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  Price: <span className="fw-bold">${product?.price} </span>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  Quantity:{" "}
-                  <Form.Select
-                    className="my-2"
-                    onChange={(e) => setQuantity(e.target.value)}
-                    name="quantity"
-                  >
-                    {product &&
-                      Array.from({ length: product.count }).map(
-                        (item, index) => (
-                          <option key={index} value={index + 1}>
-                            {index + 1}
-                          </option>
-                        )
-                      )}
-                  </Form.Select>
-                </ListGroup.Item>
-
-                <ListGroup.Item>
-                  <div className="d-grid gap-2">
-                    <Button
-                      onClick={handleAddToCart}
-                      variant="success"
-                      size="lg"
-                    >
-                      Add to cart
-                    </Button>
-                  </div>
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-          </Row>
-
-          {/* Reviews */}
-          <ListGroup variant="flush">
-            <div className="h1">Reviews</div>
-
-            {product &&
-              product.reviews.map((item, index) => (
-                <ListGroup.Item key={index}>
-                  <div className="fw-bold">{item.user.name}</div>
-
-                  <Rating initialValue={+item.rating} size={20} />
-
-                  <div>12/2/2020</div>
-
-                  <div>{item.comment}</div>
-                </ListGroup.Item>
+    <>
+      <MetaComponent description={product?.description} title={product?.name} />
+      <Container>
+        <AddedToCartMessageComponent
+          show={showMessage}
+          setShow={setShowMessage}
+        />
+        <Row className="mt-3">
+          {product && (
+            <Col style={{ zIndex: 1 }} md={4} className="p-4">
+              {product.images.map((img, index) => (
+                <div key={index} id={"img-" + index}>
+                  <Image
+                    crossOrigin="anonymous"
+                    className="mb-3"
+                    src={img.url}
+                    style={{ objectFit: "cover" }}
+                    rounded
+                    fluid
+                  />
+                </div>
               ))}
+            </Col>
+          )}
 
-            <ListGroup.Item>
-              {userInfo && !userInfo._id && (
-                <Alert className="mt-3" variant="danger">
-                  Login to write a review
-                </Alert>
-              )}
+          <Col md={8}>
+            <Row>
+              <Col md={8}>
+                <ListGroup variant="flush">
+                  <ListGroup.Item as={"h1"}>{product?.name}</ListGroup.Item>
 
-              <Form noValidate onSubmit={handleWriteReview}>
-                <Form.Label className="fw-bold">Write a review</Form.Label>
+                  <ListGroup.Item>
+                    <Rating size={24} initialValue={product?.rating} />
 
-                <Form.Control
-                  disabled={userInfo && !userInfo._id}
-                  as="textarea"
-                  rows={3}
-                  name="comment"
-                />
+                    <span style={{ marginTop: "-12px" }}>
+                      ({product?.reviewsNumber})
+                    </span>
+                  </ListGroup.Item>
 
-                <Form.Select
-                  disabled={userInfo && !userInfo._id}
-                  className="my-2"
-                  name="rating"
-                >
-                  <option value="your_rating">Your rating</option>
+                  <ListGroup.Item>
+                    Price: <span className="fw-bold">${product?.price} </span>
+                  </ListGroup.Item>
 
-                  <option value="5">5 (very good)</option>
+                  <ListGroup.Item>{product?.description}</ListGroup.Item>
+                </ListGroup>
+                <hr />
+              </Col>
 
-                  <option value="4">4 (good)</option>
+              <Col md={4}>
+                <ListGroup>
+                  <ListGroup.Item>
+                    Status: <span className="fw-bold">In stock</span>
+                  </ListGroup.Item>
 
-                  <option value="3">3 (average)</option>
+                  <ListGroup.Item>
+                    Price: <span className="fw-bold">${product?.price} </span>
+                  </ListGroup.Item>
 
-                  <option value="2">2 (bad)</option>
+                  <ListGroup.Item>
+                    Quantity:{" "}
+                    <Form.Select
+                      className="my-2"
+                      onChange={(e) => setQuantity(e.target.value)}
+                      name="quantity"
+                    >
+                      {product &&
+                        Array.from({ length: product.count }).map(
+                          (item, index) => (
+                            <option key={index} value={index + 1}>
+                              {index + 1}
+                            </option>
+                          )
+                        )}
+                    </Form.Select>
+                  </ListGroup.Item>
 
-                  <option value="1">1 (awful)</option>
-                </Form.Select>
+                  <ListGroup.Item>
+                    <div className="d-grid gap-2">
+                      <Button
+                        onClick={handleAddToCart}
+                        variant="success"
+                        size="lg"
+                      >
+                        Add to cart
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Col>
+            </Row>
 
-                <Button
-                  disabled={userInfo && !userInfo._id}
-                  variant="success"
-                  type="submit"
-                >
-                  Submit review
-                </Button>
-              </Form>
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-      </Row>
-      <div ref={messageEndRef}></div>
-    </Container>
+            {/* Reviews */}
+            <ListGroup variant="flush">
+              <div className="h1">Reviews</div>
+
+              {product &&
+                product.reviews.map((item, index) => (
+                  <ListGroup.Item key={index}>
+                    <div className="fw-bold">{item.user.name}</div>
+
+                    <Rating initialValue={+item.rating} size={20} />
+
+                    <div>12/2/2020</div>
+
+                    <div>{item.comment}</div>
+                  </ListGroup.Item>
+                ))}
+
+              <ListGroup.Item>
+                {userInfo && !userInfo._id && (
+                  <Alert className="mt-3" variant="danger">
+                    Login to write a review
+                  </Alert>
+                )}
+
+                <Form noValidate onSubmit={handleWriteReview}>
+                  <Form.Label className="fw-bold">Write a review</Form.Label>
+
+                  <Form.Control
+                    disabled={userInfo && !userInfo._id}
+                    as="textarea"
+                    rows={3}
+                    name="comment"
+                  />
+
+                  <Form.Select
+                    disabled={userInfo && !userInfo._id}
+                    className="my-2"
+                    name="rating"
+                  >
+                    <option value="your_rating">Your rating</option>
+
+                    <option value="5">5 (very good)</option>
+
+                    <option value="4">4 (good)</option>
+
+                    <option value="3">3 (average)</option>
+
+                    <option value="2">2 (bad)</option>
+
+                    <option value="1">1 (awful)</option>
+                  </Form.Select>
+
+                  <Button
+                    disabled={userInfo && !userInfo._id}
+                    variant="success"
+                    type="submit"
+                  >
+                    Submit review
+                  </Button>
+                </Form>
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+        </Row>
+        <div ref={messageEndRef}></div>
+      </Container>
+    </>
   );
 }
 
